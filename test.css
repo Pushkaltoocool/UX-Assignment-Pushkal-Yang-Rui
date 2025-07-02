@@ -1,20 +1,53 @@
-.gradient-overlay {
+.gradient-overlay-container {
   position: relative;
   display: inline-block;
+  overflow: hidden; /* Ensures the effect stays within bounds */
 }
 
-.gradient-overlay::after {
+.gradient-overlay-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.5s ease; /* Optional: Adds zoom effect on hover */
+}
+
+/* Gradient overlay effect */
+.gradient-overlay-container::after {
   content: '';
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
+  background: linear-gradient(
+    to bottom, 
+    rgba(0, 0, 0, 0.3) 0%, 
+    rgba(0, 0, 0, 0.7) 100%
+  );
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.4s ease;
 }
 
-.gradient-overlay:hover::after {
+/* Hover effects */
+.gradient-overlay-container:hover::after {
+  opacity: 1;
+}
+
+.gradient-overlay-container:hover img {
+  transform: scale(1.05); /* Optional: Slight zoom on hover */
+}
+
+.overlay-text {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 2; /* Above the overlay */
+}
+.gradient-overlay-container:hover .overlay-text {
   opacity: 1;
 }
