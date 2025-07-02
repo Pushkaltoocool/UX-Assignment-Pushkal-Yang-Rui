@@ -323,3 +323,31 @@ footer .text-muted {
 [data-aos].aos-animate {
     opacity: 1;
 }
+
+.floating-contact {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007BFF;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 1000;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.floating-contact a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+.floating-contact:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}

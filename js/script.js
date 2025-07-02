@@ -159,21 +159,53 @@ document.addEventListener('DOMContentLoaded', function() {
         // Dynamically populate the audition slots dropdown
         const auditionSlotSelect = document.getElementById('audition_slot');
         if (auditionSlotSelect) {
-            const today = new Date();
-            const nextThreeMonths = new Date(today.getFullYear(), today.getMonth() + 3, today.getDate());
-            let currentDate = today;
-            while (currentDate <= nextThreeMonths) {
-                if (currentDate.getDay() === 5) { // 5 = Friday
-                    const dateFormatted = currentDate.toLocaleDateString('en-SG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-                    ['5:00 PM - 6:00 PM', '6:00 PM - 7:00 PM', '7:00 PM - 8:00 PM'].forEach(time => {
-                        const option = document.createElement('option');
-                        option.value = `${dateFormatted} at ${time}`;
-                        option.textContent = `${dateFormatted} at ${time}`;
-                        auditionSlotSelect.appendChild(option);
-                    });
-                }
-                currentDate.setDate(currentDate.getDate() + 1);
+            // Helper to format date/time for display and value
+            function formatSlot(date) {
+                const yyyy = date.getFullYear();
+                const mm = String(date.getMonth() + 1).padStart(2, '0');
+                const dd = String(date.getDate()).padStart(2, '0');
+                const hh = String(date.getHours()).padStart(2, '0');
+                const min = String(date.getMinutes()).padStart(2, '0');
+                return {
+                    value: `${yyyy}-${mm}-${dd}T${hh}:${min}`,
+                    label: `${yyyy}-${mm}-${dd} (${date.toLocaleDateString(undefined, { weekday: 'short' })}) ${hh}:${min}`
+                };
             }
+
+            // Find next 4 Fridays from today
+            const slots = [];
+            const now = new Date();
+            let friday = new Date(now);
+            friday.setHours(17, 0, 0, 0); // Set to 5:00 PM
+            // Find the next Friday
+            friday.setDate(friday.getDate() + ((5 - friday.getDay() + 7) % 7));
+            for (let week = 0; week < 4; week++) {
+                for (let t = 17; t <= 19; t++) { // 5 PM to 7 PM
+                    for (let min = 0; min < 60; min += 30) {
+                        const slot = new Date(friday);
+                        slot.setHours(t, min, 0, 0);
+                        slots.push(formatSlot(slot));
+                    }
+                }
+                // Add 1 week
+                friday.setDate(friday.getDate() + 7);
+            }
+            // Add 8:00 PM slot for each Friday
+            friday = new Date(now);
+            friday.setHours(20, 0, 0, 0);
+            friday.setDate(friday.getDate() + ((5 - friday.getDay() + 7) % 7));
+            for (let week = 0; week < 4; week++) {
+                const slot = new Date(friday);
+                slots.push(formatSlot(slot));
+                friday.setDate(friday.getDate() + 7);
+            }
+            // Populate dropdown
+            slots.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot.value;
+                option.textContent = slot.label;
+                auditionSlotSelect.appendChild(option);
+            });
         }
         
         // Handle form submission with EmailJS
