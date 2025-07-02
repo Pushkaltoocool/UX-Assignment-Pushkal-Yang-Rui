@@ -151,6 +151,24 @@ h1, h2, h3, h4, h5, h6 {
 .navbar .nav-link.active {
     color: var(--primary-color) !important;
 }
+
+.nav-sign-in-link {
+    background: var(--primary-color);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    color: var(--light-color) !important;
+    border-radius: 0.5rem;
+    padding: 0.4em 1.2em;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+}
+.nav-sign-in-link:hover {
+    background: var(--primary-color);
+    color: #fff !important;
+    box-shadow: 0 4px 16px var(--shadow-color);
+}
 #theme-toggle {
     background: transparent;
     border: none;
@@ -182,6 +200,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 .member-img:hover {
     transform: scale(1.05);
+}
+
+.awards-list-item {
+    color: var(--dark-color);
 }
 
 
@@ -232,7 +254,11 @@ footer a:hover i {
     transform: translateY(-2px);
 }
 footer .text-muted {
-    color: #8e8e93 !important;
+    color: var(--dark-color);
+}
+
+.text-muted {
+    color: var(--dark-color);
 }
 
 /* Calendar */

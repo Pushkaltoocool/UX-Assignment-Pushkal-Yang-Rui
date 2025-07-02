@@ -1,13 +1,13 @@
 // js/firebase-config.js
 
-// Import the functions you need from the SDKs you need
+// SDKs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-// Your web app's Firebase configuration
+//Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD12yWD-aUZWpklVW9OpdthdnjsHayUbYI", // Replace with your actual API key
+  apiKey: "AIzaSyD12yWD-aUZWpklVW9OpdthdnjsHayUbYI", 
   authDomain: "nyp-band.firebaseapp.com",
   projectId: "nyp-band",
   storageBucket: "nyp-band.appspot.com",
