@@ -14,11 +14,12 @@
 
     <div id="admin-panel" class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="section-title mb-0">Event Management</h1>
+            <h1 class="section-title mb-0">Admin Dashboard</h1>
             <button id="logout-btn" class="btn btn-outline-danger">Logout <i class="bi bi-box-arrow-right"></i></button>
         </div>
 
-        <!-- Add/Edit Event Form -->
+        <!-- Event Management -->
+        <h2 class="h3">Event Management</h2>
         <div class="glass-effect p-4 mb-5">
             <h3 id="form-title" class="mb-3">Add New Event</h3>
             <form id="add-event-form">
@@ -51,32 +52,68 @@
                 </div>
             </form>
         </div>
-
-        <!-- Events List -->
-        <div>
+        <div class="mb-5">
             <h3>Current Events</h3>
             <p class="text-muted">Changes here are saved to the cloud and reflected live on the public <a href="events.html" target="_blank">Events page</a>.</p>
             <div class="table-responsive glass-effect p-3">
                 <table id="events-table" class="table table-borderless align-middle">
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Location</th>
-                            <th>Description</th>
-                            <th>Actions</th>
+                            <th>Title</th> <th>Date</th> <th>Time</th> <th>Location</th> <th>Description</th> <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Events will be populated by admin.js -->
-                    </tbody>
+                    <tbody><!-- Events will be populated by admin.js --></tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- NEW: Announcement Management -->
+        <h2 class="h3">Announcement Management</h2>
+        <div class="glass-effect p-4 mb-5">
+            <h3 id="announcement-form-title" class="mb-3">Add New Announcement</h3>
+            <form id="add-announcement-form">
+                <div class="mb-3">
+                    <label for="announcement-text" class="form-label">Announcement Text</label>
+                    <input type="text" id="announcement-text" class="form-control" placeholder="E.g., Auditions are now open! Click here to apply." required>
+                </div>
+                 <div class="mb-3">
+                    <label for="announcement-link" class="form-label">Optional Link</label>
+                    <input type="url" id="announcement-link" class="form-control" placeholder="https://example.com/join">
+                    <div class="form-text">If a link is provided, the announcement text will be clickable.</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="announcement-start" class="form-label">Start Displaying (Date & Time)</label>
+                        <input type="datetime-local" id="announcement-start" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="announcement-end" class="form-label">Stop Displaying (Date & Time)</label>
+                        <input type="datetime-local" id="announcement-end" class="form-control" required>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Add Announcement</button>
+                </div>
+            </form>
+        </div>
+        <div>
+            <h3>All Announcements</h3>
+            <p class="text-muted">Announcements will automatically appear on the public site between the start and end times.</p>
+            <div class="table-responsive glass-effect p-3">
+                <table id="announcements-table" class="table table-borderless align-middle">
+                    <thead>
+                        <tr>
+                            <th>Text</th><th>Link</th><th>Start Time</th><th>End Time</th><th>Status</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody><!-- Announcements will be populated by admin.js --></tbody>
                 </table>
             </div>
         </div>
     </div>
     
-    <!-- IMPORTANT: Script is now a module to support imports -->
     <script type="module" src="js/admin.js"></script>
 </body>
 </html>
