@@ -177,6 +177,54 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-color);
 }
 
+.announcement-banner {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
+    z-index: 1040; /* Above navbar */
+}
+.announcement-banner a {
+    color: white;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.announcement-banner .announcement-content {
+    flex-grow: 1;
+    margin: 0 2rem; /* Space for the close button */
+}
+.announcement-banner .announcement-item {
+    display: none; /* Initially hide all items */
+    animation: fadeIn 0.8s;
+}
+.announcement-banner .announcement-item.active {
+    display: block; /* Show active item */
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.announcement-banner .close-announcement {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+.announcement-banner .close-announcement:hover {
+    opacity: 1;
+}
+
 /* Hero */
 .hero-section {
     background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
@@ -322,32 +370,4 @@ footer .text-muted {
 }
 [data-aos].aos-animate {
     opacity: 1;
-}
-
-.floating-contact {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #007BFF;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 50px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  z-index: 1000;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.floating-contact a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-}
-
-.floating-contact:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
