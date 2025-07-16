@@ -1,5 +1,3 @@
-// js/admin.js
-
 import { auth, db } from './firebase-config.js';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
@@ -7,8 +5,9 @@ import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy,
 // Collection references
 const eventsCollection = collection(db, 'events');
 const announcementsCollection = collection(db, 'announcements');
+const galleryCollection = collection(db, 'gallery');
 
-// --- LOGIN PAGE LOGIC (for admin.html) ---
+//Login Page Logic
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -45,6 +44,7 @@ if (adminPanel) {
         setupEventListeners();
         renderEvents();
         renderAnnouncements();
+        renderGallery();
     };
     
     const setupEventListeners = () => {
@@ -60,6 +60,10 @@ if (adminPanel) {
         // Announcement Listeners
         document.getElementById('add-announcement-form').addEventListener('submit', handleAnnouncementFormSubmit);
         document.querySelector('#announcements-table tbody').addEventListener('click', handleAnnouncementTableClick);
+
+        // Gallery Listeners
+        document.getElementById('add-image-form').addEventListener('submit', handleImageFormSubmit);
+        document.querySelector('#gallery-table tbody').addEventListener('click', handleGalleryTableClick);
     };
 
     // --- EVENT MANAGEMENT ---
@@ -208,6 +212,104 @@ if (adminPanel) {
             document.getElementById('announcement-form-title').textContent = 'Edit Announcement';
             document.querySelector('#add-announcement-form button').textContent = 'Update Announcement';
             document.getElementById('announcement-form-title').scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    // --- GALLERY MANAGEMENT --- NEW
+    const IMG_API_KEY = '8c3ac5bab399ca801e354b900052510d'; 
+    const renderGallery = async () => {
+        const tableBody = document.querySelector('#gallery-table tbody');
+        tableBody.innerHTML = '<tr><td colspan="3" class="text-center">Loading...</td></tr>';
+        const q = query(galleryCollection, orderBy('createdAt', 'desc'));
+        const snapshot = await getDocs(q);
+        tableBody.innerHTML = '';
+        if (snapshot.empty) {
+            tableBody.innerHTML = '<tr><td colspan="3" class="text-center">No gallery images found.</td></tr>';
+        } else {
+            snapshot.forEach(doc => {
+                const item = doc.data();
+                tableBody.innerHTML += `
+                    <tr data-id="${doc.id}">
+                        <td><img src="${item.url}" alt="thumbnail" style="width: 100px; height: auto; border-radius: var(--bs-border-radius-sm);"></td>
+                        <td>${item.description}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+    };
+
+    const handleImageFormSubmit = async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const description = document.getElementById('image-description').value;
+        const fileInput = document.getElementById('image-file');
+        const imageFile = fileInput.files[0];
+        const errorDiv = document.getElementById('image-upload-error');
+        const submitButton = form.querySelector('button[type="submit"]');
+
+        if (!imageFile || !description) {
+            errorDiv.textContent = 'Please provide both a description and an image file.';
+            errorDiv.style.display = 'block';
+            return;
+        }
+        
+        errorDiv.style.display = 'none';
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Uploading...`;
+        
+        const formData = new FormData();
+        formData.append('image', imageFile);
+
+        try {
+            // 1. Upload to ImgBB
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMG_API_KEY}`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Image upload failed. Please check the file and try again.');
+            }
+
+            const result = await response.json();
+            if (!result.success) {
+                 throw new Error(result.error?.message || 'Failed to get URL from image hosting service.');
+            }
+            
+            const imageUrl = result.data.url;
+
+            // 2. Save to Firebase
+            await addDoc(galleryCollection, {
+                url: imageUrl,
+                description: description,
+                createdAt: Timestamp.now()
+            });
+
+            // 3. Reset and re-render
+            form.reset();
+            renderGallery();
+
+        } catch (error) {
+            console.error("Error adding gallery image:", error);
+            errorDiv.textContent = error.message;
+            errorDiv.style.display = 'block';
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
+    };
+
+    const handleGalleryTableClick = (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+            const targetRow = e.target.closest('tr');
+            if (!targetRow) return;
+            const docId = targetRow.dataset.id;
+            if (confirm('Are you sure you want to delete this image from the gallery?')) {
+                deleteDoc(doc(db, 'gallery', docId)).then(renderGallery);
+            }
         }
     };
 }

@@ -14,6 +14,73 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.4.0/dist/css/lightgallery.min.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .gallery-item {
+            overflow: hidden;
+            padding: 0;
+            margin-bottom: 1.5rem; 
+        }
+        .gallery-image-container {
+          position: relative;
+          display: block;
+          overflow: hidden; 
+          border-radius: var(--bs-border-radius-lg); 
+          height: 100%;
+        }
+        .gallery-image-container img {
+          transition: transform 0.4s ease;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .gallery-image-container:hover img {
+          transform: scale(1.1);
+        }
+        .gallery-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0));
+          opacity: 0;
+          transition: opacity 0.4s ease;
+          display: flex;
+          align-items: flex-end;
+          padding: 1rem;
+        }
+        .gallery-image-container:hover .gallery-overlay {
+          opacity: 1;
+        }
+        .overlay-text {
+          color: white;
+          font-weight: 500;
+          font-size: 0.9rem;
+          transform: translateY(20px);
+          transition: transform 0.4s ease, opacity 0.4s ease;
+          transition-delay: 0.1s;
+          opacity: 0;
+          margin: 0;
+          width: 100%;
+        }
+        .gallery-image-container:hover .overlay-text {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        /* Keep original video hover effect separate */
+        .video-thumbnail { position: relative; }
+        .video-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .video-thumbnail:hover .video-overlay { opacity: 1; }
+        .play-icon { font-size: 4rem; color: rgba(255, 255, 255, 0.9); }
+    </style>
 </head>
 <body>
 
@@ -74,56 +141,36 @@
 
     <!-- Gallery Grid -->
     <div class="row gy-4" id="animated-thumbnails" data-aos="fade-up">
-        <!-- Photo Items -->
-
-<a href="images/ndp.jpg" class="col-lg-4 col-md-6 gallery-item" data-category="photo">
-    <img src="images/ndp.jpg" class="img-fluid" alt="NDP Performance">
-</a>
-
-
-<a href="https://images.pexels.com/photos/210887/pexels-photo-210887.jpeg?auto=compress&cs=tinysrgb&w=1200" class="col-lg-4 col-md-6 gallery-item" data-category="photo">
-    <img src="images/outing.jpg" class="img-fluid" alt="Our visit to a music festival as a soical outing">
-</a>
-
-
-<a href="https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=1200" class="col-lg-4 col-md-6 gallery-item" data-category="photo">
-    <img src="https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1" class="img-fluid" alt="An orchestra performing on stage">
-</a>
-
-
-<a href="images/lux.jpg" class="col-lg-4 col-md-6 gallery-item" data-category="photo" width="720px" height="420px">
-    <img src="images/lux.jpg" class="img-fluid" alt="Open House Performance" width="720px" height="420px">
-</a>
+        <!-- Photo items from Firebase will be loaded here by script.js -->
         
-<!-- Video 1: Full Performance (Public Domain) -->
-<a href="#" class="col-lg-4 col-md-6 gallery-item" data-category="video" data-poster="images/lux-video-thumbnail.jpg" data-html="#video-lux">
-    <div class="video-thumbnail">
-        <img src="images/lux-video-thumbnail.jpg" class="img-fluid" alt="Freshman Orientation Party Video (LUX)">
-        <div class="video-overlay">
-            <i class="bi bi-play-circle-fill play-icon"></i>
+        <!-- Video 1: Full Performance (Public Domain) -->
+        <a href="#" class="col-lg-4 col-md-6 gallery-item" data-category="video" data-poster="images/lux-video-thumbnail.jpg" data-html="#video-lux">
+            <div class="video-thumbnail">
+                <img src="images/lux-video-thumbnail.jpg" class="img-fluid" alt="Freshman Orientation Party Video (LUX)">
+                <div class="video-overlay">
+                    <i class="bi bi-play-circle-fill play-icon"></i>
+                </div>
+            </div>
+        </a>
+        <!-- Hidden video container for lightGallery -->
+        <div style="display:none;">
+            <div id="video-lux" class="lg-video-container">
+                <video class="lg-video-object lg-html5" controls preload="none" poster="images/lux-video-thumbnail.jpg" style="width:100%;height:auto;">
+                    <source src="images/lux.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
         </div>
-    </div>
-</a>
-<!-- Hidden video container for lightGallery -->
-<div style="display:none;">
-    <div id="video-lux" class="lg-video-container">
-        <video class="lg-video-object lg-html5" controls preload="none" poster="images/lux-video-thumbnail.jpg" style="width:100%;height:auto;">
-            <source src="images/lux.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-</div>
 
-<!-- Video 2: Short atmospheric clip of a drummer -->
-<a href="https://www.pexels.com/video/a-man-playing-drums-in-a-concert-3254011/" class="col-lg-4 col-md-6 gallery-item" data-category="video">
-    <div class="video-thumbnail">
-
-        <img src="https://images.pexels.com/photos/1010519/pexels-photo-1010519.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1" class="img-fluid" alt="Close-up of a drummer playing">
-        <div class="video-overlay">
-            <i class="bi bi-play-circle-fill play-icon"></i>
-        </div>
-    </div>
-</a>
+        <!-- Video 2: Short atmospheric clip of a drummer -->
+        <a href="https://www.pexels.com/video/a-man-playing-drums-in-a-concert-3254011/" class="col-lg-4 col-md-6 gallery-item" data-category="video">
+            <div class="video-thumbnail">
+                <img src="https://images.pexels.com/photos/1010519/pexels-photo-1010519.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1" class="img-fluid" alt="Close-up of a drummer playing">
+                <div class="video-overlay">
+                    <i class="bi bi-play-circle-fill play-icon"></i>
+                </div>
+            </div>
+        </a>
     </div>
 </main>
 
@@ -135,7 +182,7 @@
                 <a href="https://www.instagram.com" target="_blank" class="mx-2"><i class="bi bi-instagram fs-4"></i></a>
                 <a href="https://www.twitter.com" target="_blank" class="mx-2"><i class="bi bi-twitter-x fs-4"></i></a>
             </div>
-            <p class="text-muted small">©2024 Nanyang Polytechnic Band Club. All rights reserved.</p>
+            <p class="lead col-md-12 mx-auto">©2024 Nanyang Polytechnic Band Club. All rights reserved.</p>
         </div>
         <div class="floating-contact">
             <a href="contact.html">Contact Us</a>

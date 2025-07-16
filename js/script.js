@@ -1,22 +1,14 @@
-// js/script.js
-
-// Import necessary services from your Firebase configuration and the Firebase SDK
 import { db } from './firebase-config.js';
 import { collection, getDocs, query, where, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-/**
- * Main entry point: This function runs once the entire HTML document has been loaded.
- */
+
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Run all global initialization functions
     initThemeToggler();
     initAOS();
     initNavActiveState();
-    displayActiveAnnouncements(); // Fetches and shows the new announcement banner
+    displayActiveAnnouncements(); 
 
-    // Run page-specific initializations
-    // These functions check for the existence of a specific element before running.
     if (document.getElementById('calendar-container')) {
         initEventsPage();
     }
@@ -32,9 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-/**
- * NEW: Fetches and displays active announcements in a banner at the top of the page.
- */
 async function displayActiveAnnouncements() {
     // If the user has closed the banner in this browser session, don't show it again.
     if (sessionStorage.getItem('announcementDismissed')) {
@@ -70,7 +59,7 @@ async function displayActiveAnnouncements() {
                 itemsHtml += `<div class="announcement-item ${index === 0 ? 'active' : ''}">${content}</div>`;
             });
 
-            // Construct the full banner with content and a close button.
+            // Construct the announcement banner
             bannerContainer.innerHTML = `
                 <div class="announcement-banner">
                     <div class="announcement-content">${itemsHtml}</div>
@@ -79,7 +68,7 @@ async function displayActiveAnnouncements() {
 
             const banner = bannerContainer.querySelector('.announcement-banner');
             
-            // Add functionality to the close button.
+            // Close button logic
             banner.querySelector('.close-announcement').addEventListener('click', () => {
                 banner.style.display = 'none';
                 // Store the dismissed state so it doesn't reappear on page navigation.
@@ -99,14 +88,11 @@ async function displayActiveAnnouncements() {
         }
     } catch (error) {
         console.error("Error fetching announcements:", error);
-        // On error, we simply do nothing to avoid showing a broken banner on the public site.
     }
 }
 
 
-/**
- * Manages the light/dark theme toggle button and persists the setting in localStorage.
- */
+//Light Mode - Dark Mode logic
 function initThemeToggler() {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeToggle) return;
@@ -128,21 +114,17 @@ function initThemeToggler() {
     });
 }
 
-/**
- * Initializes the Animate on Scroll (AOS) library for fade-in effects.
- */
+//Animate on scroll JS library
 function initAOS() {
     if (typeof AOS !== 'undefined') {
         AOS.init({
-            duration: 800, // Animation duration
-            once: true,    // Animate only once per element
+            duration: 800,
+            once: true,
         });
     }
 }
 
-/**
- * Sets the 'active' class on the correct navigation link based on the current page.
- */
+
 function initNavActiveState() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
@@ -153,9 +135,7 @@ function initNavActiveState() {
     });
 }
 
-/**
- * Initializes the events page, fetching data and rendering the table and calendar.
- */
+//Events page
 function initEventsPage() {
     const calendarEl = document.getElementById('calendar-container');
     const eventTableBody = document.querySelector('#event-details-table tbody');
@@ -182,7 +162,7 @@ function initEventsPage() {
             return;
         }
         events.forEach(event => {
-            const eventDate = new Date(event.date + 'T00:00:00'); // Ensure correct date parsing
+            const eventDate = new Date(event.date + 'T00:00:00');
             eventTableBody.innerHTML += `<tr>
                 <td>${event.title}</td>
                 <td>${eventDate.toLocaleDateString('en-SG', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
@@ -199,7 +179,7 @@ function initEventsPage() {
                 themeSystem: 'bootstrap5',
                 headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,dayGridWeek' },
                 initialView: 'dayGridMonth',
-                events: events // FullCalendar can use objects with 'title' and 'date'
+                events: events 
             });
             calendar.render();
         }
@@ -208,40 +188,78 @@ function initEventsPage() {
     loadAndDisplayEvents();
 }
 
-/**
- * Initializes the gallery page with filtering and a lightbox.
- */
-function initGalleryPage() {
+//Fetching images from Firestore and displaying
+async function initGalleryPage() {
     const galleryContainer = document.getElementById('animated-thumbnails');
-    if (typeof lightGallery === 'undefined') return;
+    if (!galleryContainer) return;
 
-    // Initialize lightbox
-    lightGallery(galleryContainer, {
-        selector: '.gallery-item',
-        thumbnail: true,
-        download: false
-    });
+    // Show a loading indicator
+    const loadingIndicator = document.createElement('div');
+    loadingIndicator.className = 'col-12 text-center';
+    loadingIndicator.textContent = 'Loading gallery...';
+    galleryContainer.prepend(loadingIndicator);
+
+    try {
+        // Fetch images from Firestore
+        const q = query(collection(db, "gallery"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+        const imagesHtml = snapshot.docs.map(doc => {
+            const item = doc.data();
+            return `
+                <a href="${item.url}" class="col-lg-4 col-md-6 gallery-item" data-category="photo">
+                    <div class="gallery-image-container">
+                        <img src="${item.url}" class="img-fluid" alt="${item.description}">
+                        <div class="gallery-overlay">
+                            <p class="overlay-text">${item.description}</p>
+                        </div>
+                    </div>
+                </a>
+            `;
+        }).join('');
+        
+        // Remove loading indicator and add the new images
+        loadingIndicator.remove();
+        galleryContainer.insertAdjacentHTML('afterbegin', imagesHtml);
+
+    } catch (error) {
+        console.error("Error fetching gallery images:", error);
+        loadingIndicator.textContent = 'Error loading gallery.';
+        loadingIndicator.classList.add('text-danger');
+    }
+
+    // Initialize lightbox after content is loaded
+    if (typeof lightGallery !== 'undefined') {
+        lightGallery(galleryContainer, {
+            selector: '.gallery-item',
+            thumbnail: true,
+            download: false
+        });
+    }
 
     // Add click listeners to filter buttons
     document.querySelectorAll('.filter-btn').forEach(button => {
         button.addEventListener('click', () => {
-            // Update button styles
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.replace('btn-primary', 'btn-outline-primary'));
             button.classList.replace('btn-outline-primary', 'btn-primary');
             
             const filter = button.dataset.filter;
 
-            // Show/hide gallery items based on the filter
             document.querySelectorAll('.gallery-item').forEach(item => {
-                item.style.display = (filter === 'all' || item.dataset.category === filter) ? 'block' : 'none';
+                // The item itself is the column, so we show/hide it.
+                item.style.display = 'none';
+                if (filter === 'all' || item.dataset.category === filter) {
+                    item.style.display = 'block';
+                }
             });
+             if (typeof AOS !== 'undefined') {
+                AOS.refresh();
+             }
         });
     });
 }
 
-/**
- * Initializes the 'Join Us' application form, including populating audition slots.
- */
+
+//Join Us application form
 function initApplicationForm() {
     const applicationForm = document.getElementById('application-form');
     
@@ -332,7 +350,7 @@ function initContactForm() {
         }
         
         const serviceID = 'service_tfyce8f'; 
-        const templateID = 'template_contact_form'; // A DIFFERENT template for general contact
+        const templateID = 'template_contact_form';
         const publicKey = 'hR23SDttfQyG0mOCi';
 
         const submitButton = contactForm.querySelector('button[type="submit"]');
@@ -342,7 +360,7 @@ function initContactForm() {
 
         emailjs.sendForm(serviceID, templateID, this, publicKey)
             .then(() => {
-                window.location.href = 'thankyou.html'; // Redirect on success
+                window.location.href = 'thankyou.html';
             },
             (err) => {
                 console.error('EmailJS Error:', err);

@@ -69,7 +69,7 @@
 
         <hr class="my-5">
 
-        <!-- NEW: Announcement Management -->
+        <!-- Announcement Management -->
         <h2 class="h3">Announcement Management</h2>
         <div class="glass-effect p-4 mb-5">
             <h3 id="announcement-form-title" class="mb-3">Add New Announcement</h3>
@@ -109,6 +109,48 @@
                         </tr>
                     </thead>
                     <tbody><!-- Announcements will be populated by admin.js --></tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- NEW: Gallery Management -->
+        <h2 class="h3">Gallery Management</h2>
+        <div class="glass-effect p-4 mb-5">
+            <h3 id="gallery-form-title" class="mb-3">Add New Gallery Image</h3>
+            <form id="add-image-form">
+                <div class="mb-3">
+                    <label for="image-description" class="form-label">Image Description</label>
+                    <input type="text" id="image-description" class="form-control" placeholder="E.g., Our performance at the Arts Festival 2024" required>
+                    <div class="form-text">This text will appear when someone hovers over the image in the gallery.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="image-file" class="form-label">Image File</label>
+                    <input type="file" id="image-file" class="form-control" accept="image/*" required>
+                     <div class="form-text">The image will be uploaded and hosted on ImgBB.</div>
+                </div>
+                <div id="image-upload-error" class="alert alert-danger" style="display: none;"></div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Add to Gallery</button>
+                </div>
+            </form>
+        </div>
+        <div>
+            <h3>Current Gallery Images</h3>
+             <p class="text-muted">Changes here are saved to the cloud and reflected live on the public <a href="gallery.html" target="_blank">Gallery page</a>.</p>
+            <div class="table-responsive glass-effect p-3">
+                <table id="gallery-table" class="table table-borderless align-middle">
+                    <thead>
+                        <tr>
+                            <th>Preview</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Gallery items will be populated by admin.js -->
+                    </tbody>
                 </table>
             </div>
         </div>
