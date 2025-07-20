@@ -57,7 +57,54 @@
     </nav>
 
 <main class="container py-5">
-<div style="width:100%;height:500px;" data-fillout-id="fNkd3MFC3Uus" data-fillout-embed-type="standard" data-fillout-inherit-parameters data-fillout-dynamic-resize></div><script src="https://server.fillout.com/embed/v1/"></script>
+    <div class="text-center" data-aos="fade-up">
+        <h1 class="section-title">Apply for the NYP Band Club</h1>
+        <p class="section-subtitle">
+            Ready to make some music? Fill out the form below to apply for an audition. We welcome students from all backgrounds and skill levels.
+        </p>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+            <div class="glass-effect p-4 p-md-5">
+                <form id="application-form">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="from_name" placeholder="Your Name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="from_email" placeholder="Your Email" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="student_id" class="form-label">Student ID</label>
+                        <input type="text" class="form-control" id="student_id" name="student_id" placeholder="e.g., 2301234A" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="instrument" class="form-label">Primary Instrument</label>
+                        <input type="text" class="form-control" id="instrument" name="instrument" placeholder="e.g., Flute, Trumpet, Percussion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="experience" class="form-label">Musical Experience (Years)</label>
+                        <input type="number" class="form-control" id="experience" name="experience" placeholder="e.g., 3" min="0" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="audition_slot" class="form-label">Preferred Audition Slot</label>
+                        <select class="form-select" id="audition_slot" name="audition_slot" required>
+                            <option value="" selected disabled>Select a date and time...</option>
+                            <!-- Options will be populated by script.js -->
+                        </select>
+                        <div class="form-text">Auditions are held every Friday between 5 PM and 8 PM. Only available slots are shown.</div>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">Submit Application</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </main>
 
     <!-- Footer -->
