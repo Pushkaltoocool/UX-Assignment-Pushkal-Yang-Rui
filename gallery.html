@@ -1,199 +1,317 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery | NYP Band Club</title>
-    <link rel="icon" type="image/png" href="images/logo.png">
-    <!-- Dependencies -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.4.0/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="css/style.css">
 
-    <style>
-        .gallery-item {
-            overflow: hidden;
-            padding: 0;
-            margin-bottom: 1.5rem; 
-        }
-        .gallery-image-container {
-          position: relative;
-          display: block;
-          overflow: hidden; 
-          border-radius: var(--bs-border-radius-lg); 
-          height: 100%;
-        }
-        .gallery-image-container img {
-          transition: transform 0.4s ease;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .gallery-image-container:hover img {
-          transform: scale(1.1);
-        }
-        .gallery-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0));
-          opacity: 0;
-          transition: opacity 0.4s ease;
-          display: flex;
-          align-items: flex-end;
-          padding: 1rem;
-        }
-        .gallery-image-container:hover .gallery-overlay {
-          opacity: 1;
-        }
-        .overlay-text {
-          color: white;
-          font-weight: 500;
-          font-size: 0.9rem;
-          transform: translateY(20px);
-          transition: transform 0.4s ease, opacity 0.4s ease;
-          transition-delay: 0.1s;
-          opacity: 0;
-          margin: 0;
-          width: 100%;
-        }
-        .gallery-image-container:hover .overlay-text {
-          transform: translateY(0);
-          opacity: 1;
-        }
-        /* Keep original video hover effect separate */
-        .video-thumbnail { position: relative; }
-        .video-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .video-thumbnail:hover .video-overlay { opacity: 1; }
-        .play-icon { font-size: 4rem; color: rgba(255, 255, 255, 0.9); }
-    </style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | NYP Band Club</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <!-- Dependencies -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery.js@1.4.0/dist/css/lightgallery.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .gallery-item {
+      overflow: hidden;
+      padding: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .gallery-image-container {
+      position: relative;
+      display: block;
+      overflow: hidden;
+      border-radius: var(--bs-border-radius-lg, 0.5rem); /* fallback for border-radius */
+      height: 100%;
+    }
+
+    .gallery-image-container img {
+      transition: transform 0.4s ease;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-image-container:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+
+    .gallery-image-container:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    .overlay-text {
+      color: white;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transform: translateY(20px);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      transition-delay: 0.1s;
+      opacity: 0;
+      margin: 0;
+      width: 100%;
+    }
+
+    .gallery-image-container:hover .overlay-text {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Masonry grid layout */
+    .grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .grid::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    /*guide Masonry*/
+    .grid-sizer {
+      width: 33.333%;
+      float: left;
+    }
+
+    .grid-item {
+      width: calc(33.333% - 20px);
+      margin: 10px; 
+      float: left;
+      box-sizing: border-box;
+    }
+    .grid-item img {
+      width: 100%;
+      display: block;
+      border-radius: 8px;
+    }
+
+    /* Video styling */
+    .video-thumbnail {
+      position: relative;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .video-thumbnail:hover .video-overlay {
+      opacity: 1;
+    }
+
+    .play-icon {
+      font-size: 4rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+  </style>
 </head>
+
 <body>
 
-    <!-- Header / Navbar -->
-    <nav class="navbar navbar-expand-lg sticky-top">
-      <div class="container">
-        <a class="navbar-brand fw-bold" href="index.html">
-            <i class="bi bi-music-note-beamed me-2"></i>NYP Band Club
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto align-items-center">
-            <li class="nav-item">
-              <a class="nav-link active" href="index.html">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="about.html">About Us</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="events.html">Events</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="gallery.html">Gallery</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="join.html">Join Us</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-sign-in-link" href="admin.html">Sign in 🔑</a>
-            </li>
-            <li class="nav-item ms-lg-2">
-                <button id="theme-toggle" class="btn btn-sm" aria-label="Toggle theme">
-                    <i class="bi bi-moon-fill"></i>
-                </button>
-            </li>
+  <!-- Header / Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-music-note-beamed me-2"></i>NYP Band Club
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="events.html">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="gallery.html">Gallery</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="join.html">Join Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-sign-in-link" href="admin.html">Sign in 🔑</a>
+          </li>
+          <li class="nav-item ms-lg-2">
+            <button id="theme-toggle" class="btn btn-sm" aria-label="Toggle theme">
+              <i class="bi bi-moon-fill"></i>
+            </button>
+          </li>
 
-          </ul>
-        </div>
+        </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-<main class="container py-5">
+  <main class="container py-5">
     <div class="text-center" data-aos="fade-up">
-        <h1 class="section-title">Gallery</h1>
-        <p class="section-subtitle">
-            Explore the vibrant moments of the NYP Band Club through our collection of photos and videos. From rehearsals to performances, relive the memorable pieces of our musical journey.
-        </p>
+      <h1 class="section-title">Gallery</h1>
+      <p class="section-subtitle">
+        Explore the vibrant moments of the NYP Band Club through our collection of photos and videos. From rehearsals to
+        performances, relive the memorable pieces of our musical journey.
+      </p>
     </div>
 
     <!-- Filter Buttons -->
     <div class="text-center mb-5" data-aos="fade-up">
-        <button class="btn btn-primary filter-btn" data-filter="all">All</button>
-        <button class="btn btn-outline-primary filter-btn" data-filter="photo">Photos</button>
-        <button class="btn btn-outline-primary filter-btn" data-filter="video">Videos</button>
+      <button class="btn btn-primary filter-btn" data-filter="all">All</button>
+      <button class="btn btn-outline-primary filter-btn" data-filter="photo">Photos</button>
+      <button class="btn btn-outline-primary filter-btn" data-filter="video">Videos</button>
     </div>
 
     <!-- Gallery Grid -->
-    <div class="row gy-4" id="animated-thumbnails" data-aos="fade-up">
-        <!-- Photo items from Firebase will be loaded here by script.js -->
-        
-        <!-- Video 1: Full Performance (Public Domain) -->
-        <a href="#" class="col-lg-4 col-md-6 gallery-item" data-category="video" data-poster="images/lux-video-thumbnail.jpg" data-html="#video-lux">
-            <div class="video-thumbnail">
-                <img src="images/lux-video-thumbnail.jpg" class="img-fluid" alt="Freshman Orientation Party Video (LUX)">
-                <div class="video-overlay">
-                    <i class="bi bi-play-circle-fill play-icon"></i>
-                </div>
-            </div>
-        </a>
-        <!-- Hidden video container for lightGallery -->
-        <div style="display:none;">
-            <div id="video-lux" class="lg-video-container">
-                <video class="lg-video-object lg-html5" controls preload="none" poster="images/lux-video-thumbnail.jpg" style="width:100%;height:auto;">
-                    <source src="images/lux.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-        </div>
+      <div class="grid" id="animated-thumbnails">
+        <div class="grid-sizer"></div>
 
-        <!-- Video 2: Short atmospheric clip of a drummer -->
-        <a href="https://www.pexels.com/video/a-man-playing-drums-in-a-concert-3254011/" class="col-lg-4 col-md-6 gallery-item" data-category="video">
-            <div class="video-thumbnail">
-                <img src="https://images.pexels.com/photos/1010519/pexels-photo-1010519.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1" class="img-fluid" alt="Close-up of a drummer playing">
-                <div class="video-overlay">
-                    <i class="bi bi-play-circle-fill play-icon"></i>
-                </div>
+        <!-- Image 1 -->
+        <a href="images/logo.jpg" class="gallery-item grid-item" data-category="image">
+          <div class="gallery-image-container">
+            <img src="images/logo.jpg" alt="Logo">
+            <div class="gallery-overlay">
+              <p class="overlay-text">Logo</p>
             </div>
+          </div>
         </a>
+
+        <a href="images/rehersal.jpg" class="gallery-item grid-item" data-category="image">
+          <div class="gallery-image-container">
+            <img src="images/rehersal.jpg" alt="Rehearsal">
+            <div class="gallery-overlay">
+              <p class="overlay-text">Rehearsal</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="images/community-event.jpg" class="gallery-item grid-item" data-category="image">
+          <div class="gallery-image-container">
+            <img src="images/community-event.jpg" alt="Community Event">
+            <div class="gallery-overlay">
+              <p class="overlay-text">Community Event</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="images/open-house.jpg" class="gallery-item grid-item" data-category="image">
+          <div class="gallery-image-container">
+            <img src="images/open-house.jpg" alt="Open House">
+            <div class="gallery-overlay">
+              <p class="overlay-text">Open House</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="images/lux-video-thumbnail.jpg" class="gallery-item grid-item" data-category="image">
+          <div class="gallery-image-container">
+            <img src="images/lux-video-thumbnail.jpg" alt="Video Thumbnail">
+            <div class="gallery-overlay">
+              <p class="overlay-text">Video Preview</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="images/hero-background.jpg" class="gallery-item grid-item" data-category="image">
+          <div class="gallery-image-container">
+            <img src="images/hero-background.jpg" alt="Hero Background">
+            <div class="gallery-overlay">
+              <p class="overlay-text">Hero Background</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="images/outing.jpg" class="gallery-item grid-item" data-category="image">
+          <div class="gallery-image-container">
+            <img src="images/outing.jpg" alt="Outing">
+            <div class="gallery-overlay">
+              <p class="overlay-text">Outing</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="images/arts-festival.jpg" class="gallery-item grid-item" data-category="image">
+          <div class="gallery-image-container">
+            <img src="images/arts-festival.jpg" alt="Arts Festival">
+            <div class="gallery-overlay">
+              <p class="overlay-text">Arts Festival</p>
+            </div>
+          </div>
+        </a>
+      </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-auto py-4">
+    <div class="container text-center">
+      <div class="mb-3">
+        <a href="https://www.facebook.com" target="_blank" class="mx-2"><i class="bi bi-facebook fs-4"></i></a>
+        <a href="https://www.instagram.com" target="_blank" class="mx-2"><i class="bi bi-instagram fs-4"></i></a>
+        <a href="https://www.twitter.com" target="_blank" class="mx-2"><i class="bi bi-twitter-x fs-4"></i></a>
+      </div>
+      <p class="lead col-md-12 mx-auto">©2024 Nanyang Polytechnic Band Club. All rights reserved.</p>
     </div>
-</main>
-
-    <!-- Footer -->
-    <footer class="mt-auto py-4">
-        <div class="container text-center">
-            <div class="mb-3">
-                <a href="https://www.facebook.com" target="_blank" class="mx-2"><i class="bi bi-facebook fs-4"></i></a>
-                <a href="https://www.instagram.com" target="_blank" class="mx-2"><i class="bi bi-instagram fs-4"></i></a>
-                <a href="https://www.twitter.com" target="_blank" class="mx-2"><i class="bi bi-twitter-x fs-4"></i></a>
-            </div>
-            <p class="lead col-md-12 mx-auto">©2024 Nanyang Polytechnic Band Club. All rights reserved.</p>
-        </div>
-        <div class="floating-contact">
-            <a href="contact.html">Contact Us</a>
-        </div>
-    </footer>
+    <div class="floating-contact">
+      <a href="contact.html">Contact Us</a>
+    </div>
+  </footer>
 
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery.js@1.4.0/dist/js/lightgallery.min.js"></script>
-    <script type="module" src="js/script.js"></script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery.js@1.4.0/dist/js/lightgallery.min.js"></script>
+  <script type="module" src="js/script.js"></script>
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+  <script>
+    var grid = document.querySelector('.grid');
+    imagesLoaded(grid, function() {
+      new Masonry(grid, {
+        itemSelector: '.grid-item',
+        columnWidth: '.grid-sizer',
+        percentPosition: true
+      });
+    });
+    window.addEventListener('resize', function() {
+      msnry.layout();
+    });
+  </script>
 </body>
+
 </html>
