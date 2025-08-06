@@ -206,9 +206,10 @@ async function initGalleryPage() {
         const imagesHtml = snapshot.docs.map(doc => {
             const item = doc.data();
             return `
-                <a href="${item.url}" class="col-lg-4 col-md-6 gallery-item" data-category="photo">
+
+                <a href="${item.url}" class="gallery-item grid-item" data-category="image">
                     <div class="gallery-image-container">
-                        <img src="${item.url}" class="img-fluid" alt="${item.description}">
+                        <img src="${item.url}" alt="${item.description}">
                         <div class="gallery-overlay">
                             <p class="overlay-text">${item.description}</p>
                         </div>
