@@ -163,8 +163,8 @@ function initEventsPage() {
         }
         events.forEach(event => {
             const eventDate = new Date(event.date + 'T00:00:00');
-            eventTableBody.innerHTML += `<tr>
-                <td>${event.title}</td>
+            eventTableBody.innerHTML += `<tr >
+                <td class='event-title'>${event.title}</td>
                 <td>${eventDate.toLocaleDateString('en-SG', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                 <td>${event.time}</td>
                 <td>${event.location}</td>
@@ -203,24 +203,38 @@ async function initGalleryPage() {
         // Fetch images from Firestore
         const q = query(collection(db, "gallery"), orderBy("createdAt", "desc"));
         const snapshot = await getDocs(q);
-        const imagesHtml = snapshot.docs.map(doc => {
-            const item = doc.data();
-            return `
-
-                <a href="${item.url}" class="gallery-item grid-item" data-category="image">
-                    <div class="gallery-image-container">
-                        <img src="${item.url}" alt="${item.description}">
-                        <div class="gallery-overlay">
-                            <p class="overlay-text">${item.description}</p>
-                        </div>
-                    </div>
-                </a>
-            `;
-        }).join('');
         
-        // Remove loading indicator and add the new images
+        const fragment = document.createDocumentFragment();
+        const newItems = [];
+
+        snapshot.docs.forEach(doc => {
+            const item = doc.data();
+            const a = document.createElement('a');
+            a.href = item.url;
+            a.className = 'gallery-item grid-item';
+            a.dataset.category = 'photo'; // Set category for filtering
+            a.innerHTML = `
+                <div class="gallery-image-container">
+                    <img src="${item.url}" alt="${item.description}">
+                    <div class="gallery-overlay">
+                        <p class="overlay-text">${item.description}</p>
+                    </div>
+                </div>
+            `;
+            fragment.appendChild(a);
+            newItems.push(a);
+        });
+        
         loadingIndicator.remove();
-        galleryContainer.insertAdjacentHTML('afterbegin', imagesHtml);
+        galleryContainer.appendChild(fragment);
+
+        // Let images load, then add to Masonry and relayout
+        imagesLoaded(galleryContainer, function() {
+            if (window.msnry) {
+                window.msnry.appended(newItems);
+                window.msnry.layout();
+            }
+        });
 
     } catch (error) {
         console.error("Error fetching gallery images:", error);
@@ -246,12 +260,18 @@ async function initGalleryPage() {
             const filter = button.dataset.filter;
 
             document.querySelectorAll('.gallery-item').forEach(item => {
-                // The item itself is the column, so we show/hide it.
-                item.style.display = 'none';
-                if (filter === 'all' || item.dataset.category === filter) {
+                const category = item.dataset.category;
+                if (filter === 'all' || category === filter) {
                     item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
                 }
             });
+            
+            // Relayout Masonry after filtering
+            if (window.msnry) {
+                window.msnry.layout();
+            }
              if (typeof AOS !== 'undefined') {
                 AOS.refresh();
              }
