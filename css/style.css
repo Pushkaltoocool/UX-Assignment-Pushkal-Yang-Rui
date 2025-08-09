@@ -68,7 +68,7 @@ main {
 
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
-    color: var(--dark-color);
+    color: var(--text-color);
 }
 
 .section-title {
@@ -107,12 +107,63 @@ h1, h2, h3, h4, h5, h6 {
     backdrop-filter: blur(15px);
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 15px var(--shadow-color);
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px var(--shadow-color);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 35px var(--shadow-color);
+}
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 1rem;
+    padding: 2px;
+    background: var(--musical-gradient);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+.card:hover::before {
+    opacity: 1;
+}
+.card .card-img-top {
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+.card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 1.25rem;
+}
+.card-body .btn {
+    margin-top: auto;
 }
 .card-title, .card-text {
+    color: var(--text-color);
+}
+
+.content-card {
+    background-color: #ffffff;
+    color: var(--text-color);
+}
+[data-theme="dark"] .content-card {
+    background-color: var(--card-bg);
+}
+[data-theme="dark"] .content-card p {
     color: var(--text-color);
 }
 
@@ -188,7 +239,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     position: relative;
     text-align: center;
-    z-index: 1040; /* Above navbar */
+    z-index: 1040;
 }
 .announcement-banner a {
     color: white;
@@ -197,14 +248,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 .announcement-banner .announcement-content {
     flex-grow: 1;
-    margin: 0 2rem; /* Space for the close button */
+    margin: 0 2rem;
 }
 .announcement-banner .announcement-item {
-    display: none; /* Initially hide all items */
+    display: none;
     animation: fadeIn 0.8s;
 }
 .announcement-banner .announcement-item.active {
-    display: block; /* Show active item */
+    display: block;
 }
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -228,14 +279,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Hero */
-.hero-section {
-    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
-        url('https://png.pngtree.com/thumb_back/fh260/background/20240728/pngtree-yellow-lights-on-stage-of-music-band-image_15929457.jpg') no-repeat center center;
-    background-size: cover;
-    padding: 100px 0;
-    color: #fff;
-    text-align: center;
-}
+
 .hero-section h1, .hero-section p {
     color: white;
 }
@@ -272,10 +316,158 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1.05);
 }
 
-.awards-list-item {
+#trophy:hover{
+    transform: scale(1.10);
+}
+
+.achievements-list-container {
+    background: transparent;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    transition: all 0.3s ease-in-out;
+}
+
+.achievements-list-container h2 {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color, #007bff);
+}
+
+.achievements-list-container .list-group-item {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.achievements-list-container .list-group-item:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    z-index: 10;
+}
+
+.achievements-list-container .list-group-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 8px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color, #6c757d));
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.achievements-list-container .list-group-item:hover::before {
+    opacity: 1;
+}
+
+.achievements-list-container .awards-list-item {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.achievements-list-container .badge {
+    font-size: 0.9rem;
+    padding: 0.6em 0.9em;
+    font-weight: 600;
+    background-color: var(--primary-color, #007bff) !important;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.achievements-list-container .list-group-item:hover .badge {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+}
+
+/* About Page - Key Members Section */
+.member-card {
+    background-color: transparent;
+    transition: none;
+    box-shadow: none;
+}
+.member-card:hover {
+    transform: none;
+    box-shadow: none;
+}
+.member-card .card-text {
+    max-width: 300px;
+    margin-inline: auto;
+}
+
+/* About Page - Testimonial Slideshow */
+#testimonialCarousel .carousel-inner {
+    padding-bottom: 3rem;
+}
+
+.testimonial-card {
+    max-width: 700px;
+    width: 90%;
+    text-align: center;
+    padding: 2rem;
+    margin: 0 auto;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.testimonial-card:hover {
+    transform: none; 
+}
+
+.testimonial-card .blockquote-footer {
+    color: var(--text-color);
+    opacity: 0.8;
+    background-color: transparent;
+}
+
+.testimonial-card .blockquote-footer::before {
+    content: "" !important;
+}
+
+.quote-text {
     color: var(--dark-color);
 }
 
+.carousel-indicators [data-bs-target] {
+    background-color: var(--primary-color);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    padding: 1.2rem;
+    background-size: 50%;
+}
+
+/* Call to Action (CTA) Section */
+.cta-section {
+    background-color: var(--primary-color);
+    padding: 4rem 0;
+}
+
+.cta-section .btn-light {
+    color: var(--primary-color);
+}
+.cta-section .btn-outline-light:hover {
+    color: var(--primary-color);
+}
 
 
 /* Gallery */
@@ -323,52 +515,46 @@ footer a:hover i {
     color: var(--secondary-color);
     transform: translateY(-2px);
 }
-footer .text-muted {
-    color: var(--dark-color);
-}
 
 .text-muted {
-    color: var(--dark-color);
+    color: #6c757d;
 }
 
-/* =================================== */
-/*          Events Table Styling       */
-/* =================================== */
+[data-theme="dark"] .text-muted {
+    color: rgba(235, 235, 245, 0.7) !important;
+}
 
-/* Overall container for the table to handle responsiveness */
+
+/*Events Table Styling */
 .table-responsive {
-    overflow-x: auto; /* Ensures table is scrollable on small screens */
+    overflow-x: auto; 
 }
 
-/* Main table styles */
 #event-details-table {
     width: 100%;
-    border-collapse: separate; /* Important for using border-radius on rows */
-    border-spacing: 0 8px;    /* Adds vertical space between rows */
-    color: var(--text-color); /* Use the theme's text color */
+    border-collapse: separate;
+    border-spacing: 0 8px; 
+    color: var(--text-color); 
 }
 
-/* Table Header */
 #event-details-table thead th {
     color: var(--text-color);
-    background-color: transparent; /* Header will be part of the glass effect */
+    background-color: transparent; 
     font-weight: 600;
     text-align: left;
     padding: 12px 20px;
-    border-bottom: 2px solid var(--border-color); /* A subtle separator */
+    border-bottom: 2px solid var(--border-color); 
 }
 
-/* Table Body Cells (td) */
 #event-details-table tbody td {
     background-color: var(--light-color);
-    color: var(--text-color); /* Default text color for cells */
+    color: var(--text-color); 
     font-weight: 400;
     padding: 15px 20px;
     vertical-align: middle;
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
-/* Styling for the first and last cells in a row for rounded corners */
 #event-details-table tbody td:first-child {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -378,22 +564,21 @@ footer .text-muted {
     border-bottom-right-radius: 10px;
 }
 
-/* --- The Hover Effect --- */
 #event-details-table tbody tr:hover td {
-    background-color: var(--primary-color); /* The blue from your theme */
-    color: #ffffff; /* White text on hover */
-    transform: translateY(-2px) scale(1.01); /* Subtle lift effect */
+    background-color: var(--primary-color); 
+    color: #ffffff;
+    transform: translateY(-2px) scale(1.01); 
 }
 
-/* Make the title bold on hover for emphasis */
+
 #event-details-table tbody tr:hover .event-title {
     font-weight: 700;
 }
 
-/* Handle row hover for dark mode specifically if needed */
+
 [data-theme="dark"] #event-details-table tbody tr:hover td {
-    background-color: var(--primary-color); /* Stays blue, as requested */
-    color: #ffffff; /* White text remains readable */
+    background-color: var(--primary-color); 
+    color: #ffffff; 
 }
 
 /* Calendar */
@@ -405,7 +590,7 @@ footer .text-muted {
     color: var(--text-color);
 }
 .fc .fc-toolbar-title {
-    color: var(--dark-color);
+    color: var(--text-color);
 }
 .fc .fc-col-header-cell-cushion {
     color: var(--text-color);
@@ -486,4 +671,3 @@ footer .text-muted {
   transform: scale(1.1);
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
-
