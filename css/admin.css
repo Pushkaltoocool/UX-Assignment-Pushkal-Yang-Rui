@@ -1,0 +1,47 @@
+/* /css/admin.css */
+:root {
+    --primary-color: #007aff;
+    --border-color: rgba(60, 60, 67, 0.2);
+    --light-color: #f2f2f7;
+    --text-color: #1c1c1e;
+    --card-bg: rgba(255, 255, 255, 0.75);
+    --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+body {
+    background-color: #f2f2f7;
+    font-family: 'Poppins', sans-serif;
+}
+
+.glass-effect {
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px var(--shadow-color);
+    overflow: hidden;
+    position: relative;
+}
+
+.form-control, .form-select {
+    background-color: var(--light-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(0, 122, 255, 0.25);
+}
+.form-label, .text-muted, h1, h2, h3, p {
+    color: var(--text-color);
+}
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+.table { color: var(--text-color); }
+.table-borderless th, .table-borderless td, .table-borderless thead th { border: 0; }
+tbody tr { transition: background-color 0.2s ease; }
+tbody tr:hover { background-color: rgba(0,0,0,0.05); }

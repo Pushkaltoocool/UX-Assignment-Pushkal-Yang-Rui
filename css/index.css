@@ -1,0 +1,25 @@
+/* /css/index.css */
+
+.hero-section h1, .hero-section p {
+    color: white;
+}
+
+#hero-image {
+    border-radius: 20px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 600px) {
+    #hero-image {
+        border-radius: 12px;
+        max-width: 95vw;
+    }
+}
+
+#main-header-hero {
+    font-size: 70px;
+}

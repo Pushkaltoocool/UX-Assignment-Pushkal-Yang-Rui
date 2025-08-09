@@ -1,0 +1,96 @@
+/* /css/events.css */
+
+/* Events Table Styling */
+.table-responsive {
+    overflow-x: auto; 
+}
+
+#event-details-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px; 
+    color: var(--text-color); 
+}
+
+#event-details-table thead th {
+    color: var(--text-color);
+    background-color: transparent; 
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--border-color); 
+}
+
+#event-details-table tbody td {
+    background-color: var(--light-color);
+    color: var(--text-color); 
+    font-weight: 400;
+    padding: 15px 20px;
+    vertical-align: middle;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+#event-details-table tbody td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+#event-details-table tbody td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#event-details-table tbody tr:hover td {
+    background-color: var(--primary-color); 
+    color: #ffffff;
+    transform: translateY(-2px) scale(1.01); 
+}
+
+#event-details-table tbody tr:hover .event-title {
+    font-weight: 700;
+}
+
+[data-theme="dark"] #event-details-table tbody tr:hover td {
+    background-color: var(--primary-color); 
+    color: #ffffff; 
+}
+
+/* Calendar */
+#calendar-container {
+    padding: 1.5rem;
+    border-radius: 1rem;
+}
+.fc {
+    color: var(--text-color);
+}
+.fc .fc-toolbar-title {
+    color: var(--text-color);
+}
+.fc .fc-col-header-cell-cushion {
+    color: var(--text-color);
+}
+.fc .fc-button-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.fc .fc-button-primary:hover,
+.fc .fc-button-primary:active {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+.fc .fc-daygrid-day {
+    background-color: transparent;
+    border-color: var(--border-color);
+}
+.fc-theme-bootstrap5 .fc-daygrid-day-frame:hover {
+    background-color: var(--light-color);
+}
+.fc .fc-day-today {
+    background-color: rgba(0, 122, 255, 0.1) !important;
+}
+.fc-event {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+    padding: 2px 4px;
+    font-weight: 500;
+}
