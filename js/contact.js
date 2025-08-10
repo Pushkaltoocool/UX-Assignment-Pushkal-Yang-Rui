@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function initContactForm() {
+
+    
     const contactForm = document.getElementById('contact-form');
     if (!contactForm) return;
 
@@ -24,6 +26,7 @@ function initContactForm() {
             subject: document.getElementById('subject').value,
             message: document.getElementById('message').value,
         };
+
 
         try {
             // Rui: Save the message to Firestore first.
@@ -55,4 +58,6 @@ function initContactForm() {
             submitButton.innerHTML = originalButtonText;
         }
     });
+
+    
 }

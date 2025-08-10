@@ -235,6 +235,17 @@ h6 {
     color: white;
 }
 
+.btn-outline-secondary {
+    color: var(--text-color);
+    border-color: var(--text-color);
+}
+
+.btn-outline-secondary:hover {
+    background-color: white;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
 /* Navbar */
 .navbar {
     background: var(--navbar-bg) !important;
@@ -406,8 +417,12 @@ footer {
 }
 
 /* Rui & Pushkal: Make .lead text in footer readable in dark mode. */
-.lead {
-    color: var(--dark-color);
+main .lead {
+    color: var(--text-color);
+}
+
+footer .lead {
+    color: var(--light-color);
 }
 
 [data-theme="dark"] .lead {
