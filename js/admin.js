@@ -6,6 +6,16 @@ import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy,
 const eventsCollection = collection(db, 'events');
 const announcementsCollection = collection(db, 'announcements');
 const galleryCollection = collection(db, 'gallery');
+const applicationsCollection = collection(db, 'applications');
+const contactsCollection = collection(db, 'contacts'); // New collection reference
+
+// Simple HTML escaping function to prevent XSS
+const escapeHTML = (str) => {
+    if (str === null || str === undefined) return '';
+    return str.toString().replace(/[&<>"']/g, match => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[match]));
+};
 
 //Login Page Logic
 const loginForm = document.getElementById('login-form');
@@ -45,6 +55,8 @@ if (adminPanel) {
         renderEvents();
         renderAnnouncements();
         renderGallery();
+        renderApplications();
+        renderContacts(); // New function call
     };
     
     const setupEventListeners = () => {
@@ -64,6 +76,12 @@ if (adminPanel) {
         // Gallery Listeners
         document.getElementById('add-image-form').addEventListener('submit', handleImageFormSubmit);
         document.querySelector('#gallery-table tbody').addEventListener('click', handleGalleryTableClick);
+
+        // Application Listeners
+        document.getElementById('applications-table-body').addEventListener('click', handleApplicationTableClick);
+        
+        // Contact Listeners - New
+        document.getElementById('contacts-table-body').addEventListener('click', handleContactTableClick);
     };
 
     // --- EVENT MANAGEMENT ---
@@ -81,8 +99,8 @@ if (adminPanel) {
                 const event = doc.data();
                 tableBody.innerHTML += `
                     <tr data-id="${doc.id}">
-                        <td>${event.title}</td> <td>${event.date}</td> <td>${event.time}</td>
-                        <td>${event.location}</td> <td>${event.description}</td>
+                        <td>${escapeHTML(event.title)}</td> <td>${escapeHTML(event.date)}</td> <td>${escapeHTML(event.time)}</td>
+                        <td>${escapeHTML(event.location)}</td> <td>${escapeHTML(event.description)}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-primary edit-btn">Edit</button>
                             <button class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
@@ -157,12 +175,12 @@ if (adminPanel) {
 
                 tableBody.innerHTML += `
                     <tr data-id="${doc.id}" 
-                        data-text="${ann.text}" 
-                        data-link="${ann.link || ''}"
+                        data-text="${escapeHTML(ann.text)}" 
+                        data-link="${escapeHTML(ann.link || '')}"
                         data-start="${startDate.toISOString().slice(0, 16)}"
                         data-end="${endDate.toISOString().slice(0, 16)}">
-                        <td class="text-truncate" style="max-width: 250px;">${ann.text}</td>
-                        <td class="text-truncate" style="max-width: 150px;"><a href="${ann.link}" target="_blank">${ann.link}</a></td>
+                        <td class="text-truncate" style="max-width: 250px;">${escapeHTML(ann.text)}</td>
+                        <td class="text-truncate" style="max-width: 150px;"><a href="${escapeHTML(ann.link)}" target="_blank">${escapeHTML(ann.link)}</a></td>
                         <td>${startDate.toLocaleString()}</td> <td>${endDate.toLocaleString()}</td>
                         <td>${statusBadge}</td>
                         <td>
@@ -215,7 +233,7 @@ if (adminPanel) {
         }
     };
 
-    // --- GALLERY MANAGEMENT --- NEW
+    // --- GALLERY MANAGEMENT ---
     const IMG_API_KEY = '8c3ac5bab399ca801e354b900052510d'; 
     const renderGallery = async () => {
         const tableBody = document.querySelector('#gallery-table tbody');
@@ -230,8 +248,8 @@ if (adminPanel) {
                 const item = doc.data();
                 tableBody.innerHTML += `
                     <tr data-id="${doc.id}">
-                        <td><img src="${item.url}" alt="thumbnail" style="width: 100px; height: auto; border-radius: var(--bs-border-radius-sm);"></td>
-                        <td>${item.description}</td>
+                        <td><img src="${escapeHTML(item.url)}" alt="thumbnail" style="width: 100px; height: auto; border-radius: var(--bs-border-radius-sm);"></td>
+                        <td>${escapeHTML(item.description)}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
                         </td>
@@ -264,31 +282,16 @@ if (adminPanel) {
         formData.append('image', imageFile);
 
         try {
-            // 1. Upload to ImgBB
             const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMG_API_KEY}`, {
-                method: 'POST',
-                body: formData,
+                method: 'POST', body: formData,
             });
-
-            if (!response.ok) {
-                throw new Error('Image upload failed. Please check the file and try again.');
-            }
-
+            if (!response.ok) throw new Error('Image upload failed.');
             const result = await response.json();
-            if (!result.success) {
-                 throw new Error(result.error?.message || 'Failed to get URL from image hosting service.');
-            }
+            if (!result.success) throw new Error(result.error?.message || 'Failed to get URL from image host.');
             
-            const imageUrl = result.data.url;
-
-            // 2. Save to Firebase
             await addDoc(galleryCollection, {
-                url: imageUrl,
-                description: description,
-                createdAt: Timestamp.now()
+                url: result.data.url, description: description, createdAt: Timestamp.now()
             });
-
-            // 3. Reset and re-render
             form.reset();
             renderGallery();
 
@@ -307,9 +310,119 @@ if (adminPanel) {
             const targetRow = e.target.closest('tr');
             if (!targetRow) return;
             const docId = targetRow.dataset.id;
-            if (confirm('Are you sure you want to delete this image from the gallery?')) {
+            if (confirm('Delete this image from the gallery?')) {
                 deleteDoc(doc(db, 'gallery', docId)).then(renderGallery);
             }
+        }
+    };
+
+    // --- APPLICATION MANAGEMENT ---
+    const renderApplications = async () => {
+        const tableBody = document.getElementById('applications-table-body');
+        tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Loading Applications...</td></tr>';
+        
+        const q = query(applicationsCollection, orderBy('auditionDate', 'asc'), orderBy('auditionTime', 'asc'));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+            tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No applications found.</td></tr>';
+            return;
+        }
+        
+        tableBody.innerHTML = '';
+        snapshot.forEach(doc => {
+            const app = doc.data();
+            const auditionDate = new Date(`${app.auditionDate}T${app.auditionTime}`);
+            const formattedSlot = auditionDate.toLocaleDateString('en-SG', { weekday: 'short', day: 'numeric', month: 'short' })
+                                  + ', ' + auditionDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+            tableBody.innerHTML += `
+                <tr data-id="${doc.id}">
+                    <td>${escapeHTML(app.fullName)}</td>
+                    <td>${escapeHTML(app.studentId)}</td>
+                    <td>${escapeHTML(app.email)}</td>
+                    <td>${escapeHTML(app.instrument)}</td>
+                    <td>${escapeHTML(app.experience)} years</td>
+                    <td>${escapeHTML(formattedSlot)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
+                    </td>
+                </tr>`;
+        });
+    };
+
+    const handleApplicationTableClick = (e) => {
+        const targetRow = e.target.closest('tr');
+        if (!targetRow || !e.target.classList.contains('delete-btn')) return;
+        
+        const docId = targetRow.dataset.id;
+        const applicantName = targetRow.cells[0].textContent;
+        
+        if (confirm(`Are you sure you want to delete the application for "${applicantName}"? This action cannot be undone.`)) {
+            deleteDoc(doc(db, 'applications', docId))
+                .then(() => {
+                    console.log(`Application ${docId} deleted.`);
+                    renderApplications();
+                })
+                .catch(error => {
+                    console.error("Error deleting application:", error);
+                    alert("Failed to delete the application. Please try again.");
+                });
+        }
+    };
+
+    // --- NEW: CONTACT MESSAGE MANAGEMENT ---
+    const renderContacts = async () => {
+        const tableBody = document.getElementById('contacts-table-body');
+        tableBody.innerHTML = '<tr><td colspan="6" class="text-center">Loading Messages...</td></tr>';
+        
+        const q = query(contactsCollection, orderBy('createdAt', 'desc'));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+            tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No contact messages found.</td></tr>';
+            return;
+        }
+        
+        tableBody.innerHTML = '';
+        snapshot.forEach(doc => {
+            const msg = doc.data();
+            const receivedDate = msg.createdAt.toDate();
+            const formattedDate = receivedDate.toLocaleString('en-SG', {
+                day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit'
+            });
+
+            tableBody.innerHTML += `
+                <tr data-id="${doc.id}">
+                    <td>${escapeHTML(formattedDate)}</td>
+                    <td>${escapeHTML(msg.from_name)}</td>
+                    <td><a href="mailto:${escapeHTML(msg.from_email)}">${escapeHTML(msg.from_email)}</a></td>
+                    <td>${escapeHTML(msg.subject)}</td>
+                    <td style="white-space: pre-wrap; min-width: 250px; word-break: break-word;">${escapeHTML(msg.message)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
+                    </td>
+                </tr>`;
+        });
+    };
+
+    const handleContactTableClick = (e) => {
+        const targetRow = e.target.closest('tr');
+        if (!targetRow || !e.target.classList.contains('delete-btn')) return;
+        
+        const docId = targetRow.dataset.id;
+        const contactName = targetRow.cells[1].textContent;
+        
+        if (confirm(`Are you sure you want to delete the message from "${contactName}"? This action cannot be undone.`)) {
+            deleteDoc(doc(db, 'contacts', docId))
+                .then(() => {
+                    console.log(`Contact message ${docId} deleted.`);
+                    renderContacts();
+                })
+                .catch(error => {
+                    console.error("Error deleting contact message:", error);
+                    alert("Failed to delete the message. Please try again.");
+                });
         }
     };
 }

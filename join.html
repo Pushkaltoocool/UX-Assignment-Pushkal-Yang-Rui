@@ -16,6 +16,7 @@
 
     <!-- Your Stylesheets -->
     <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/join.css"> <!-- Added a specific stylesheet for join page -->
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -31,7 +32,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto align-items-center">
             <li class="nav-item">
-              <a class="nav-link active" href="index.html">Home</a>
+              <a class="nav-link" href="index.html">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="about.html">About Us</a>
@@ -43,7 +44,7 @@
               <a class="nav-link" href="gallery.html">Gallery</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="join.html">Join Us</a>
+                <a class="nav-link active" href="join.html">Join Us</a>
             </li>
             <li class="nav-item">
               <a class="nav-sign-in-link" href="admin.html">Sign in 🔑</a>
@@ -53,7 +54,6 @@
                     <i class="bi bi-moon-fill"></i>
                 </button>
             </li>
-
           </ul>
         </div>
       </div>
@@ -70,38 +70,63 @@
     <div class="row justify-content-center mt-4">
         <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
             <div class="glass-effect p-4 p-md-5">
-                <form id="application-form">
+                <form id="application-form" novalidate>
+                    <!-- Personal Info -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="name" class="form-label">Full Name</label>
                             <input type="text" class="form-control" id="name" name="from_name" placeholder="Your Name" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="email" name="from_email" placeholder="Your Email" required>
+                            <label for="student_id" class="form-label">Student ID</label>
+                            <input type="text" class="form-control" id="student_id" name="student_id" placeholder="e.g., 230123A" required>
+                             <div class="form-text">Must be a valid NYP student admin number (e.g., 231234A).</div>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="student_id" class="form-label">Student ID</label>
-                        <input type="text" class="form-control" id="student_id" name="student_id" placeholder="e.g., 2301234A" required>
+                        <label for="email" class="form-label">School Email Address</label>
+                        <input type="email" class="form-control" id="email" name="from_email" placeholder="e.g., 230123A@mymail.nyp.edu.sg" required>
+                        <div class="form-text">Must be a valid NYP email ending in @mymail.nyp.edu.sg and match your Student ID.</div>
                     </div>
+
+                    <!-- Musical Background -->
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="instrument" class="form-label">Primary Instrument</label>
+                            <input type="text" class="form-control" id="instrument" name="instrument" placeholder="e.g., Flute, Trumpet, Percussion" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="experience" class="form-label">Experience (Years)</label>
+                            <input type="number" class="form-control" id="experience" name="experience" placeholder="e.g., 3" min="0" required>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Audition Slot Selection -->
                     <div class="mb-3">
-                        <label for="instrument" class="form-label">Primary Instrument</label>
-                        <input type="text" class="form-control" id="instrument" name="instrument" placeholder="e.g., Flute, Trumpet, Percussion" required>
+                         <label class="form-label">Choose Your Audition Slot</label>
+                         <p class="form-text">First, select an available Friday from the calendar. Then, pick a time. Auditions are held every Friday between 5:00 PM and 8:00 PM.</p>
                     </div>
-                    <div class="mb-3">
-                        <label for="experience" class="form-label">Musical Experience (Years)</label>
-                        <input type="number" class="form-control" id="experience" name="experience" placeholder="e.g., 3" min="0" required>
+                    <div id="audition-error" class="alert alert-danger" style="display: none;"></div>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div id="calendar-container"></div>
+                        </div>
+                        <div class="col-md-5">
+                            <div id="time-slots-container">
+                                <p class="text-center text-muted mt-5">Please select a date first.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="audition_slot" class="form-label">Preferred Audition Slot</label>
-                        <select class="form-select" id="audition_slot" name="audition_slot" required>
-                            <option value="" selected disabled>Select a date and time...</option>
-                            <!-- Options will be populated by script.js -->
-                        </select>
-                        <div class="form-text">Auditions are held every Friday between 5 PM and 8 PM. Only available slots are shown.</div>
-                    </div>
-                    <div class="text-end">
+
+                    <!-- Hidden fields to store final date/time for submission -->
+                    <input type="hidden" id="selected_date" name="selected_date">
+                    <input type="hidden" id="selected_time" name="selected_time">
+                    <input type="hidden" id="audition_slot_formatted" name="audition_slot_formatted">
+
+
+                    <div class="text-end mt-4">
                         <button type="submit" class="btn btn-primary btn-lg px-5">Submit Application</button>
                     </div>
                 </form>
