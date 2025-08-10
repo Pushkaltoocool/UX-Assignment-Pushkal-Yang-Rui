@@ -1,5 +1,3 @@
-/* /css/global.css */
-
 :root {
     --primary-color: #007aff; /* Apple Blue */
     --secondary-color: #34c759; /* Apple Green */
@@ -30,7 +28,7 @@
     --shadow-color: rgba(0, 0, 0, 0.2);
 }
 
-/* Global Reset */
+
 * {
     transition: all 0.3s ease;
     scroll-behavior: smooth;
@@ -292,6 +290,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 .form-label {
     color: var(--text-color);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background-color: var(--light-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+    background-color: var(--light-color);
+    color: var(--text-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(10, 132, 255, 0.25);
 }
 
 /* Footer */

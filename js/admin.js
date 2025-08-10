@@ -7,7 +7,7 @@ const eventsCollection = collection(db, 'events');
 const announcementsCollection = collection(db, 'announcements');
 const galleryCollection = collection(db, 'gallery');
 const applicationsCollection = collection(db, 'applications');
-const contactsCollection = collection(db, 'contacts'); // New collection reference
+const contactsCollection = collection(db, 'contacts'); 
 
 // Simple HTML escaping function to prevent XSS
 const escapeHTML = (str) => {
@@ -56,7 +56,7 @@ if (adminPanel) {
         renderAnnouncements();
         renderGallery();
         renderApplications();
-        renderContacts(); // New function call
+        renderContacts(); 
     };
     
     const setupEventListeners = () => {
@@ -80,7 +80,7 @@ if (adminPanel) {
         // Application Listeners
         document.getElementById('applications-table-body').addEventListener('click', handleApplicationTableClick);
         
-        // Contact Listeners - New
+        // Contact Listeners
         document.getElementById('contacts-table-body').addEventListener('click', handleContactTableClick);
     };
 
@@ -371,7 +371,7 @@ if (adminPanel) {
         }
     };
 
-    // --- NEW: CONTACT MESSAGE MANAGEMENT ---
+    // --- CONTACT MESSAGE MANAGEMENT ---
     const renderContacts = async () => {
         const tableBody = document.getElementById('contacts-table-body');
         tableBody.innerHTML = '<tr><td colspan="6" class="text-center">Loading Messages...</td></tr>';
