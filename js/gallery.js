@@ -20,13 +20,12 @@ async function initGalleryPage() {
         const snapshot = await getDocs(q);
         
         const fragment = document.createDocumentFragment();
-        const newItems = [];
 
         snapshot.docs.forEach(doc => {
             const item = doc.data();
             const a = document.createElement('a');
             a.href = item.url;
-            a.className = 'gallery-item grid-item';
+            a.className = 'gallery-item';
             a.dataset.category = 'photo';
             a.innerHTML = `
                 <div class="gallery-image-container">
@@ -37,20 +36,18 @@ async function initGalleryPage() {
                 </div>
             `;
             fragment.appendChild(a);
-            newItems.push(a);
         });
         
         loadingIndicator.remove();
         galleryContainer.appendChild(fragment);
 
         imagesLoaded(galleryContainer, function() {
-            if (window.msnry) {
-                window.msnry.appended(newItems);
-                window.msnry.layout();
-            }
+            // Masonry specific layout code removed.
+            console.log('Images loaded, grid is ready.');
         });
 
-    } catch (error) {
+    } catch (error)
+    {
         console.error("Error fetching gallery images:", error);
         loadingIndicator.textContent = 'Error loading gallery.';
         loadingIndicator.classList.add('text-danger');
@@ -58,7 +55,7 @@ async function initGalleryPage() {
 
     if (typeof lightGallery !== 'undefined') {
         lightGallery(galleryContainer, {
-            selector: '.gallery-item',
+            selector: 'a[data-category="photo"]', // Only apply lightgallery to photos
             thumbnail: true,
             download: false
         });
@@ -71,18 +68,14 @@ async function initGalleryPage() {
             
             const filter = button.dataset.filter;
 
-            document.querySelectorAll('.grid-item').forEach(item => {
-                const category = item.dataset.category || 'photo'; // Default to photo if not set
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                const category = item.dataset.category || 'photo';
                  if (filter === 'all' || category === filter) {
                     item.style.display = 'block';
                 } else {
                     item.style.display = 'none';
                 }
             });
-            
-            if (window.msnry) {
-                window.msnry.layout();
-            }
         });
     });
 }
