@@ -2,14 +2,14 @@ import { auth, db } from './firebase-config.js';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-// Collection references
+// Pushkal: These are the Firebase collections we use.
 const eventsCollection = collection(db, 'events');
 const announcementsCollection = collection(db, 'announcements');
 const galleryCollection = collection(db, 'gallery');
 const applicationsCollection = collection(db, 'applications');
-const contactsCollection = collection(db, 'contacts'); 
+const contactsCollection = collection(db, 'contacts');
 
-// Simple HTML escaping function to prevent XSS
+// Rui: This just escapes HTML so nothing weird gets injected.
 const escapeHTML = (str) => {
     if (str === null || str === undefined) return '';
     return str.toString().replace(/[&<>"']/g, match => ({
@@ -17,7 +17,7 @@ const escapeHTML = (str) => {
     }[match]));
 };
 
-//Login Page Logic
+// Pushkal: Handles the login form for admin.
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -56,9 +56,9 @@ if (adminPanel) {
         renderAnnouncements();
         renderGallery();
         renderApplications();
-        renderContacts(); 
+        renderContacts();
     };
-    
+
     const setupEventListeners = () => {
         // Logout
         document.getElementById('logout-btn').addEventListener('click', async () => {
@@ -68,7 +68,7 @@ if (adminPanel) {
         // Event Listeners
         document.getElementById('add-event-form').addEventListener('submit', handleEventFormSubmit);
         document.querySelector('#events-table tbody').addEventListener('click', handleEventTableClick);
-        
+
         // Announcement Listeners
         document.getElementById('add-announcement-form').addEventListener('submit', handleAnnouncementFormSubmit);
         document.querySelector('#announcements-table tbody').addEventListener('click', handleAnnouncementTableClick);
@@ -79,7 +79,7 @@ if (adminPanel) {
 
         // Application Listeners
         document.getElementById('applications-table-body').addEventListener('click', handleApplicationTableClick);
-        
+
         // Contact Listeners
         document.getElementById('contacts-table-body').addEventListener('click', handleContactTableClick);
     };
@@ -234,7 +234,7 @@ if (adminPanel) {
     };
 
     // --- GALLERY MANAGEMENT ---
-    const IMG_API_KEY = '8c3ac5bab399ca801e354b900052510d'; 
+    const IMG_API_KEY = '8c3ac5bab399ca801e354b900052510d';
     const renderGallery = async () => {
         const tableBody = document.querySelector('#gallery-table tbody');
         tableBody.innerHTML = '<tr><td colspan="3" class="text-center">Loading...</td></tr>';
@@ -272,12 +272,12 @@ if (adminPanel) {
             errorDiv.style.display = 'block';
             return;
         }
-        
+
         errorDiv.style.display = 'none';
         const originalButtonText = submitButton.innerHTML;
         submitButton.disabled = true;
         submitButton.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Uploading...`;
-        
+
         const formData = new FormData();
         formData.append('image', imageFile);
 
@@ -288,7 +288,7 @@ if (adminPanel) {
             if (!response.ok) throw new Error('Image upload failed.');
             const result = await response.json();
             if (!result.success) throw new Error(result.error?.message || 'Failed to get URL from image host.');
-            
+
             await addDoc(galleryCollection, {
                 url: result.data.url, description: description, createdAt: Timestamp.now()
             });
@@ -320,7 +320,7 @@ if (adminPanel) {
     const renderApplications = async () => {
         const tableBody = document.getElementById('applications-table-body');
         tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Loading Applications...</td></tr>';
-        
+
         const q = query(applicationsCollection, orderBy('auditionDate', 'asc'), orderBy('auditionTime', 'asc'));
         const snapshot = await getDocs(q);
 
@@ -328,13 +328,13 @@ if (adminPanel) {
             tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No applications found.</td></tr>';
             return;
         }
-        
+
         tableBody.innerHTML = '';
         snapshot.forEach(doc => {
             const app = doc.data();
             const auditionDate = new Date(`${app.auditionDate}T${app.auditionTime}`);
             const formattedSlot = auditionDate.toLocaleDateString('en-SG', { weekday: 'short', day: 'numeric', month: 'short' })
-                                  + ', ' + auditionDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                + ', ' + auditionDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
 
             tableBody.innerHTML += `
                 <tr data-id="${doc.id}">
@@ -354,10 +354,10 @@ if (adminPanel) {
     const handleApplicationTableClick = (e) => {
         const targetRow = e.target.closest('tr');
         if (!targetRow || !e.target.classList.contains('delete-btn')) return;
-        
+
         const docId = targetRow.dataset.id;
         const applicantName = targetRow.cells[0].textContent;
-        
+
         if (confirm(`Are you sure you want to delete the application for "${applicantName}"? This action cannot be undone.`)) {
             deleteDoc(doc(db, 'applications', docId))
                 .then(() => {
@@ -375,7 +375,7 @@ if (adminPanel) {
     const renderContacts = async () => {
         const tableBody = document.getElementById('contacts-table-body');
         tableBody.innerHTML = '<tr><td colspan="6" class="text-center">Loading Messages...</td></tr>';
-        
+
         const q = query(contactsCollection, orderBy('createdAt', 'desc'));
         const snapshot = await getDocs(q);
 
@@ -383,7 +383,7 @@ if (adminPanel) {
             tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No contact messages found.</td></tr>';
             return;
         }
-        
+
         tableBody.innerHTML = '';
         snapshot.forEach(doc => {
             const msg = doc.data();
@@ -409,10 +409,10 @@ if (adminPanel) {
     const handleContactTableClick = (e) => {
         const targetRow = e.target.closest('tr');
         if (!targetRow || !e.target.classList.contains('delete-btn')) return;
-        
+
         const docId = targetRow.dataset.id;
         const contactName = targetRow.cells[1].textContent;
-        
+
         if (confirm(`Are you sure you want to delete the message from "${contactName}"? This action cannot be undone.`)) {
             deleteDoc(doc(db, 'contacts', docId))
                 .then(() => {

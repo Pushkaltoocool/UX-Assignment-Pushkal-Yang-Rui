@@ -1,90 +1,119 @@
-/* Events Table Styling */
+/* Pushkal: Styles for the events table and calendar. */
+/* Pushkal: Makes the table scrollable on small screens. */
 .table-responsive {
-    overflow-x: auto; 
+    overflow-x: auto;
 }
 
+/* Pushkal: Main event table styling. */
 #event-details-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 8px; 
-    color: var(--text-color); 
+    border-spacing: 0 8px;
+    color: var(--text-color);
 }
 
+/* Pushkal: Header row for the event table. */
 #event-details-table thead th {
     color: var(--text-color);
-    background-color: transparent; 
+    background-color: transparent;
     font-weight: 600;
     text-align: left;
     padding: 12px 20px;
-    border-bottom: 2px solid var(--border-color); 
+    border-bottom: 2px solid var(--border-color);
 }
 
+/* Pushkal: Table body cells, with background and padding. */
 #event-details-table tbody td {
     background-color: var(--light-color);
-    color: var(--text-color); 
+    color: var(--text-color);
     font-weight: 400;
     padding: 15px 20px;
     vertical-align: middle;
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
+/* Pushkal: Rounded corners for the first cell in each row. */
 #event-details-table tbody td:first-child {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 }
+
+/* Pushkal: Rounded corners for the last cell in each row. */
 #event-details-table tbody td:last-child {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
 
+/* Pushkal: Highlight row on hover. */
 #event-details-table tbody tr:hover td {
-    background-color: var(--primary-color); 
+    background-color: var(--primary-color);
     color: #ffffff;
-    transform: translateY(-2px) scale(1.01); 
+    transform: translateY(-2px) scale(1.01);
 }
 
+/* Pushkal: Make event title bold on hover. */
 #event-details-table tbody tr:hover .event-title {
     font-weight: 700;
 }
 
+/* Pushkal: Dark mode hover for event rows. */
 [data-theme="dark"] #event-details-table tbody tr:hover td {
-    background-color: var(--primary-color); 
-    color: #ffffff; 
+    background-color: var(--primary-color);
+    color: #ffffff;
 }
 
-/* Calendar */
+/* Pushkal: Below is for the calendar widget. */
+/* Pushkal: Container for the calendar. */
 #calendar-container {
     padding: 1.5rem;
     border-radius: 1rem;
 }
+
+/* Pushkal: FullCalendar base styles. */
 .fc {
     color: var(--text-color);
 }
+
+/* Pushkal: Calendar title styling. */
 .fc .fc-toolbar-title {
     color: var(--text-color);
 }
+
+/* Pushkal: Calendar column header styling. */
 .fc .fc-col-header-cell-cushion {
     color: var(--text-color);
 }
+
+/* Pushkal: Main calendar button style. */
 .fc .fc-button-primary {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
 }
+
+/* Pushkal: Calendar button hover/active. */
 .fc .fc-button-primary:hover,
 .fc .fc-button-primary:active {
     background-color: var(--accent-color);
     border-color: var(--accent-color);
 }
+
+/* Pushkal: Each day cell in the calendar. */
 .fc .fc-daygrid-day {
     background-color: transparent;
     border-color: var(--border-color);
 }
+
+/* Pushkal: Highlight day cell on hover. */
 .fc-theme-bootstrap5 .fc-daygrid-day-frame:hover {
     background-color: var(--light-color);
 }
+
+/* Pushkal: Today cell highlight. */
 .fc .fc-day-today {
     background-color: rgba(0, 122, 255, 0.1) !important;
 }
+
+/* Pushkal: Event badge style in calendar. */
 .fc-event {
     background-color: var(--primary-color) !important;
     border-color: var(--primary-color) !important;

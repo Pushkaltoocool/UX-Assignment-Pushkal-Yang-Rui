@@ -1,4 +1,5 @@
-/* Key Members Section */
+/* Pushkal: Styles for the key members section. */
+/* Pushkal: Member profile images, round and shadowed. */
 .member-img {
     width: 150px;
     height: 150px;
@@ -6,29 +7,38 @@
     border: 4px solid var(--light-color);
     box-shadow: 0 4px 10px var(--shadow-color);
 }
+
+/* Pushkal: Slight zoom on member image hover. */
 .member-img:hover {
     transform: scale(1.05);
 }
 
+/* Pushkal: Card for each member, no shadow by default. */
 .member-card {
     background-color: transparent;
     transition: none;
     box-shadow: none;
 }
+
+/* Pushkal: No hover effect for member card. */
 .member-card:hover {
     transform: none;
     box-shadow: none;
 }
+
+/* Pushkal: Limit width of member description. */
 .member-card .card-text {
     max-width: 300px;
     margin-inline: auto;
 }
 
-/* Achievements Section */
-#trophy:hover{
+/* Pushkal: Styles for the achievements section. */
+/* Pushkal: Trophy icon zooms on hover. */
+#trophy:hover {
     transform: scale(1.10);
 }
 
+/* Pushkal: Container for achievements list. */
 .achievements-list-container {
     background: transparent;
     padding: 2rem;
@@ -37,12 +47,14 @@
     transition: all 0.3s ease-in-out;
 }
 
+/* Pushkal: Achievements section title. */
 .achievements-list-container h2 {
     font-weight: 700;
     margin-bottom: 1.5rem;
     color: var(--primary-color, #007bff);
 }
 
+/* Pushkal: Each achievement item, with card style. */
 .achievements-list-container .list-group-item {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -54,6 +66,7 @@
     position: relative;
 }
 
+/* Pushkal: Hover effect for achievement item. */
 .achievements-list-container .list-group-item:hover {
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
@@ -63,7 +76,10 @@
 .achievements-list-container .list-group-item::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     border-radius: 8px;
     padding: 2px;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color, #6c757d));
@@ -119,7 +135,7 @@
 }
 
 .testimonial-card:hover {
-    transform: none; 
+    transform: none;
 }
 
 .testimonial-card .blockquote-footer {
@@ -157,6 +173,7 @@
 .cta-section .btn-light {
     color: var(--primary-color);
 }
+
 .cta-section .btn-outline-light:hover {
     color: var(--primary-color);
 }

@@ -1,7 +1,7 @@
 import { db } from './firebase-config.js';
 import { collection, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initContactForm();
 });
 
@@ -9,7 +9,7 @@ function initContactForm() {
     const contactForm = document.getElementById('contact-form');
     if (!contactForm) return;
 
-    contactForm.addEventListener('submit', async function(e) {
+    contactForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const submitButton = contactForm.querySelector('button[type="submit"]');
@@ -17,7 +17,7 @@ function initContactForm() {
         submitButton.disabled = true;
         submitButton.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Sending...`;
 
-        // Create data object for Firestore and EmailJS
+        // Pushkal: Grab all the form values here.
         const formData = {
             from_name: document.getElementById('name').value,
             from_email: document.getElementById('email').value,
@@ -26,26 +26,26 @@ function initContactForm() {
         };
 
         try {
-            // 1. Save data to Firestore first for record-keeping
+            // Rui: Save the message to Firestore first.
             await addDoc(collection(db, 'contacts'), {
                 ...formData,
                 createdAt: Timestamp.now()
             });
 
-            // 2. Check for EmailJS and send confirmation email to the user
+            // Pushkal: If EmailJS is set up, send a confirmation email.
             if (typeof emailjs === 'undefined') {
                 alert('Your message has been received, but the email confirmation could not be sent.');
                 window.location.href = 'thankyou.html';
                 return;
             }
-            
-            const serviceID = 'service_tfyce8f'; 
+
+            const serviceID = 'service_tfyce8f';
             const templateID = 'template_contact_form';
             const publicKey = 'hR23SDttfQyG0mOCi';
 
 
             await emailjs.sendForm(serviceID, templateID, this, publicKey);
-            
+
             window.location.href = 'thankyou.html';
 
         } catch (err) {

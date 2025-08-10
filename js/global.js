@@ -1,18 +1,22 @@
+// Pushkal & Rui: This file handles navigation, theme, and global features for the site.
 import { db } from './firebase-config.js';
 import { collection, getDocs, query, where, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-document.addEventListener('DOMContentLoaded', function() {
+// Rui: Waits for the page to load, then sets up everything.
+document.addEventListener('DOMContentLoaded', function () {
     initThemeToggler();
     initAOS();
     initNavActiveState();
-    displayActiveAnnouncements(); 
+    displayActiveAnnouncements();
 });
 
+// Pushkal: Shows announcements if there are any active ones.
 async function displayActiveAnnouncements() {
+    // Rui: Lets users close the announcement banner and remembers it.
     if (sessionStorage.getItem('announcementDismissed')) {
         return;
     }
-    
+
     const bannerContainer = document.createElement('div');
     document.body.prepend(bannerContainer);
 
@@ -31,8 +35,8 @@ async function displayActiveAnnouncements() {
         if (announcements.length > 0) {
             let itemsHtml = '';
             announcements.forEach((ann, index) => {
-                const content = ann.link 
-                    ? `<a href="${ann.link}" target="_blank" rel="noopener noreferrer">${ann.text}</a>` 
+                const content = ann.link
+                    ? `<a href="${ann.link}" target="_blank" rel="noopener noreferrer">${ann.text}</a>`
                     : ann.text;
                 itemsHtml += `<div class="announcement-item ${index === 0 ? 'active' : ''}">${content}</div>`;
             });
@@ -44,7 +48,7 @@ async function displayActiveAnnouncements() {
                 </div>`;
 
             const banner = bannerContainer.querySelector('.announcement-banner');
-            
+
             banner.querySelector('.close-announcement').addEventListener('click', () => {
                 banner.style.display = 'none';
                 sessionStorage.setItem('announcementDismissed', 'true');
@@ -65,13 +69,14 @@ async function displayActiveAnnouncements() {
     }
 }
 
+// Pushkal: Handles the theme toggle button (light/dark mode).
 function initThemeToggler() {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeToggle) return;
 
     const sunIcon = '<i class="bi bi-sun-fill"></i>';
     const moonIcon = '<i class="bi bi-moon-fill"></i>';
-    
+
     const currentTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', currentTheme);
     themeToggle.innerHTML = (currentTheme === 'dark') ? sunIcon : moonIcon;
@@ -84,6 +89,7 @@ function initThemeToggler() {
     });
 }
 
+// Rui: Animates elements on scroll if AOS is loaded.
 function initAOS() {
     if (typeof AOS !== 'undefined') {
         AOS.init({
@@ -93,6 +99,7 @@ function initAOS() {
     }
 }
 
+// Pushkal: Highlights the current page in the navbar.
 function initNavActiveState() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {

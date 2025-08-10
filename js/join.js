@@ -1,8 +1,8 @@
-// /js/join.js
+// Pushkal: Handles the join form logic.
 import { db } from './firebase-config.js';
 import { collection, getDocs, addDoc, query, where, Timestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initApplicationForm();
 });
 
@@ -15,7 +15,7 @@ function initApplicationForm() {
     let availableFridays = [];
     let selectedDate = null; // Stores the selected date string 'YYYY-MM-DD'
     let selectedTime = null; // Stores the selected time string 'HH:MM'
-    
+
     // --- ELEMENT SELECTORS ---
     const calendarContainer = document.getElementById('calendar-container');
     const timeSlotsContainer = document.getElementById('time-slots-container');
@@ -44,7 +44,7 @@ function initApplicationForm() {
         `;
         // Day headers (Sun, Mon, etc.)
         dayNames.forEach(day => html += `<div class="calendar-day-header">${day}</div>`);
-        
+
         // Blank days for grid alignment
         for (let i = 0; i < firstDay.getDay(); i++) {
             html += `<div></div>`;
@@ -61,7 +61,7 @@ function initApplicationForm() {
         calendarContainer.innerHTML = html;
         addCalendarEventListeners();
     }
-    
+
     // Generates the list of the next 4 available Fridays
     function generateAvailableFridays() {
         let fridays = [];
@@ -87,7 +87,7 @@ function initApplicationForm() {
             day.addEventListener('click', () => handleDateSelection(day.dataset.date));
         });
     }
-    
+
     // --- TIME SLOT LOGIC ---
 
     // Renders time slots for the selected date
@@ -95,7 +95,7 @@ function initApplicationForm() {
         timeSlotsContainer.innerHTML = `<div class="d-flex justify-content-center align-items-center h-100"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>`;
 
         const allSlots = ["17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
-        
+
         try {
             // Fetch applications for the selected date to find booked slots
             const q = query(collection(db, "applications"), where("auditionDate", "==", dateStr));
@@ -119,7 +119,7 @@ function initApplicationForm() {
             timeSlotsContainer.innerHTML = `<p class="text-danger text-center">Could not load time slots. Please try again.</p>`;
         }
     }
-    
+
     // Adds click listeners to the time slot buttons
     function addTimeSlotEventListeners() {
         document.querySelectorAll('.time-slot-btn').forEach(btn => {
@@ -128,38 +128,38 @@ function initApplicationForm() {
             }
         });
     }
-    
+
     // --- SELECTION HANDLERS ---
-    
+
     // Handles what happens when a user clicks a date
     function handleDateSelection(dateStr) {
         selectedDate = dateStr;
         selectedTime = null; // Reset time when a new date is chosen
         updateHiddenInputs();
-        
+
         // Re-render calendar to show selection
         renderCalendar(new Date(dateStr).getFullYear(), new Date(dateStr).getMonth());
         // Render time slots for the selected date
         renderTimeSlots(dateStr);
     }
-    
+
     // Handles what happens when a user clicks a time
     function handleTimeSelection(timeStr) {
         selectedTime = timeStr;
         updateHiddenInputs();
 
         // Re-render time slots to show selection
-        renderTimeSlots(selectedDate); 
+        renderTimeSlots(selectedDate);
     }
-    
+
     // Updates the hidden input fields used for form submission
     function updateHiddenInputs() {
         selectedDateInput.value = selectedDate || '';
         selectedTimeInput.value = selectedTime || '';
         if (selectedDate && selectedTime) {
             const dateObj = new Date(`${selectedDate}T${selectedTime}`);
-            const formatted = dateObj.toLocaleDateString('en-SG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) 
-                              + ' at ' + dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            const formatted = dateObj.toLocaleDateString('en-SG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+                + ' at ' + dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
             formattedSlotInput.value = formatted;
         } else {
             formattedSlotInput.value = '';
@@ -178,7 +178,7 @@ function initApplicationForm() {
 
     function validateForm() {
         hideError();
-        // Student ID validation: YYNNNNA (YY >= 23)
+        // Admin Number validation
         const studentId = studentIdInput.value.trim().toUpperCase();
         const idRegex = /^(2[3-9]|[3-9][0-9])\d{4}[A-Z]$/;
         if (!idRegex.test(studentId)) {
@@ -193,19 +193,19 @@ function initApplicationForm() {
             showError(`Your email must be ${expectedEmail} to match your Student ID.`);
             return false;
         }
-        
+
         // Check if all required fields are filled
         if (!applicationForm.checkValidity()) {
             showError("Please fill out all personal and musical background fields.");
             return false;
         }
-        
+
         // Check if an audition slot is fully selected
         if (!selectedDate || !selectedTime) {
             showError("Please select an available audition date and time from the calendar.");
             return false;
         }
-        
+
         return true;
     }
 
@@ -248,7 +248,7 @@ function initApplicationForm() {
             } else {
                 console.warn("EmailJS script not loaded. Skipping email notification.");
             }
-            
+
             // 3. Redirect on success
             window.location.href = 'thankyou.html';
 

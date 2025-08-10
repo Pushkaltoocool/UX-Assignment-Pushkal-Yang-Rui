@@ -1,4 +1,30 @@
-/* Calendar Styling */
+/* Rui: Make sure input and textarea text and placeholders are readable in dark mode. */
+input,
+textarea {
+    color: var(--text-color);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #888;
+    opacity: 1;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+    background-color: var(--light-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: #bbb;
+    opacity: 1;
+}
+
+/* Rui: Styles for the join form calendar and time slots. */
+/* Rui: Main container for the calendar. */
 #calendar-container {
     background-color: var(--bs-tertiary-bg);
     padding: 1.25rem;
@@ -6,6 +32,7 @@
     border: 1px solid var(--bs-border-color);
 }
 
+/* Rui: Header with month and navigation arrows. */
 .calendar-header {
     display: flex;
     justify-content: space-between;
@@ -18,13 +45,16 @@
     font-weight: 500;
 }
 
+/* Rui: The grid for days of the week and dates. */
 #calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 0.5rem;
 }
 
-.calendar-day, .calendar-day-header {
+/* Rui: Styles for each day and header cell. */
+.calendar-day,
+.calendar-day-header {
     text-align: center;
     padding: 0.5rem;
     aspect-ratio: 1 / 1;
@@ -34,12 +64,14 @@
     border-radius: 50%;
 }
 
+/* Rui: Header row for day names (Sun, Mon, etc). */
 .calendar-day-header {
     font-weight: 700;
     font-size: 0.8rem;
     color: var(--bs-secondary-color);
 }
 
+/* Rui: Days that are not available are faded out. */
 .calendar-day {
     cursor: not-allowed;
     color: var(--bs-secondary-color);
@@ -48,6 +80,7 @@
     border: 2px solid transparent;
 }
 
+/* Rui: Available days are clickable and bold. */
 .calendar-day.available {
     cursor: pointer;
     color: var(--bs-primary);
@@ -55,28 +88,33 @@
     opacity: 1;
 }
 
+/* Rui: Highlight available day on hover. */
 .calendar-day.available:hover {
     border: 2px solid var(--bs-primary);
     background-color: var(--bs-light);
 }
 
+/* Rui: Selected day is filled in blue. */
 .calendar-day.selected {
     background-color: var(--bs-primary);
     color: var(--bs-white) !important;
     border-color: var(--bs-primary);
 }
 
-/* Time Slot Styling */
+/* Rui: Below is for the time slot selection grid. */
+/* Rui: Container for all the time slots. */
 #time-slots-container {
     padding: 1rem;
 }
 
+/* Rui: Grid for arranging time slot buttons. */
 .time-slot-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
 }
 
+/* Rui: Each time slot button. */
 .time-slot-btn {
     width: 100%;
     padding: 0.75rem;
@@ -84,12 +122,14 @@
     border: 1px solid var(--bs-border-color);
 }
 
+/* Rui: Selected time slot is highlighted. */
 .time-slot-btn.selected {
     background-color: var(--bs-primary);
     border-color: var(--bs-primary);
     color: var(--bs-white);
 }
 
+/* Rui: Booked slots are crossed out. */
 .time-slot-btn:disabled {
     text-decoration: line-through;
 }

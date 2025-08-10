@@ -1,17 +1,21 @@
-/* Uniform Grid Layout */
+/* Rui: This is for the grid layout in the gallery. */
+/* Rui: Sets up the main grid for gallery items. */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
+  /* Rui: Gives space between gallery items. */
   max-width: 1200px;
   margin: 0 auto;
 }
 
+/* Rui: Each gallery item gets rounded corners and hides overflow. */
 .gallery-item {
   overflow: hidden;
   border-radius: var(--bs-border-radius-lg, 0.5rem);
 }
 
+/* Rui: Container for each image, handles overlay and hover. */
 .gallery-image-container {
   position: relative;
   display: block;
@@ -20,6 +24,7 @@
   border-radius: inherit;
 }
 
+/* Rui: Make sure images fill their box and look nice. */
 .gallery-image-container img {
   transition: transform 0.4s ease;
   width: 100%;
@@ -28,10 +33,12 @@
   aspect-ratio: 16 / 10;
 }
 
+/* Rui: Zoom in a bit when you hover an image. */
 .gallery-image-container:hover img {
   transform: scale(1.1);
 }
 
+/* Rui: Overlay that appears on hover, for text. */
 .gallery-overlay {
   position: absolute;
   top: 0;
@@ -47,10 +54,12 @@
   border-radius: inherit;
 }
 
+/* Rui: Show the overlay when hovering. */
 .gallery-image-container:hover .gallery-overlay {
   opacity: 1;
 }
 
+/* Rui: Text inside the overlay, slides up on hover. */
 .overlay-text {
   color: white;
   font-weight: 500;
@@ -63,18 +72,21 @@
   width: 100%;
 }
 
+/* Rui: Animate the text in when hovering. */
 .gallery-image-container:hover .overlay-text {
   transform: translateY(0);
   opacity: 1;
 }
 
-/* Video styling */
+/* Rui: Styles for video thumbnails in the gallery. */
+/* Rui: Video thumbnails get rounded corners too. */
 .video-thumbnail {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
 }
 
+/* Rui: Dark overlay for play icon on videos. */
 .video-overlay {
   position: absolute;
   top: 0;
@@ -89,29 +101,34 @@
   transition: opacity 0.3s ease;
 }
 
+/* Rui: Show the overlay when hovering a video. */
 .video-thumbnail:hover .video-overlay {
   opacity: 1;
 }
 
+/* Rui: Big play icon in the middle. */
 .play-icon {
   font-size: 4rem;
   color: rgba(255, 255, 255, 0.9);
 }
 
+/* Rui: For embedding videos responsively. */
 .iframe-container {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 Aspect Ratio */
-    border-radius: var(--bs-border-radius-lg, 0.5rem); 
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 56.25%;
+  /* 16:9 Aspect Ratio */
+  border-radius: var(--bs-border-radius-lg, 0.5rem);
 }
 
+/* Rui: Make the iframe fill the container. */
 .iframe-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
 }

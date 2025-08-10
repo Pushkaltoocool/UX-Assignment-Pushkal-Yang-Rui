@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel | NYP Band Club</title>
-    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="icon" type="image/jpeg" href="images/logo.jpg">
 
     <!-- Dependencies -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,6 +14,7 @@
 
     <link rel="stylesheet" href="css/admin.css">
 </head>
+
 <body>
 
     <div id="admin-panel" class="container py-5">
@@ -37,13 +39,14 @@
                     </div>
                 </div>
                 <div class="row">
-                     <div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="event-time" class="form-label">Time</label>
                         <input type="time" id="event-time" class="form-control" placeholder="e.g., 7:00 PM" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="event-location" class="form-label">Location</label>
-                        <input type="text" id="event-location" class="form-control" placeholder="e.g., NYP Auditorium" required>
+                        <input type="text" id="event-location" class="form-control" placeholder="e.g., NYP Auditorium"
+                            required>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -57,12 +60,18 @@
         </div>
         <div class="mb-5">
             <h3>Current Events</h3>
-            <p class="text-muted">Changes here are saved to the cloud and reflected live on the public <a href="events.html" target="_blank">Events page</a>.</p>
+            <p class="text-muted">Changes here are saved to the cloud and reflected live on the public <a
+                    href="events.html" target="_blank">Events page</a>.</p>
             <div class="table-responsive glass-effect p-3">
                 <table id="events-table" class="table table-borderless align-middle">
                     <thead>
                         <tr>
-                            <th>Title</th> <th>Date</th> <th>Time</th> <th>Location</th> <th>Description</th> <th>Actions</th>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Location</th>
+                            <th>Description</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody><!-- Events will be populated by admin.js --></tbody>
@@ -79,11 +88,13 @@
             <form id="add-announcement-form">
                 <div class="mb-3">
                     <label for="announcement-text" class="form-label">Announcement Text</label>
-                    <input type="text" id="announcement-text" class="form-control" placeholder="E.g., Auditions are now open! Click here to apply." required>
+                    <input type="text" id="announcement-text" class="form-control"
+                        placeholder="E.g., Auditions are now open! Click here to apply." required>
                 </div>
-                 <div class="mb-3">
+                <div class="mb-3">
                     <label for="announcement-link" class="form-label">Optional Link</label>
-                    <input type="url" id="announcement-link" class="form-control" placeholder="https://example.com/join">
+                    <input type="url" id="announcement-link" class="form-control"
+                        placeholder="https://example.com/join">
                     <div class="form-text">If a link is provided, the announcement text will be clickable.</div>
                 </div>
                 <div class="row">
@@ -103,12 +114,18 @@
         </div>
         <div class="mb-5">
             <h3>All Announcements</h3>
-            <p class="text-muted">Announcements will automatically appear on the public site between the start and end times.</p>
+            <p class="text-muted">Announcements will automatically appear on the public site between the start and end
+                times.</p>
             <div class="table-responsive glass-effect p-3">
                 <table id="announcements-table" class="table table-borderless align-middle">
                     <thead>
                         <tr>
-                            <th>Text</th><th>Link</th><th>Start Time</th><th>End Time</th><th>Status</th><th>Actions</th>
+                            <th>Text</th>
+                            <th>Link</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody><!-- Announcements will be populated by admin.js --></tbody>
@@ -125,13 +142,15 @@
             <form id="add-image-form">
                 <div class="mb-3">
                     <label for="image-description" class="form-label">Image Description</label>
-                    <input type="text" id="image-description" class="form-control" placeholder="E.g., Our performance at the Arts Festival 2024" required>
-                    <div class="form-text">This text will appear when someone hovers over the image in the gallery.</div>
+                    <input type="text" id="image-description" class="form-control"
+                        placeholder="E.g., Our performance at the Arts Festival 2024" required>
+                    <div class="form-text">This text will appear when someone hovers over the image in the gallery.
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="image-file" class="form-label">Image File</label>
                     <input type="file" id="image-file" class="form-control" accept="image/*" required>
-                     <div class="form-text">The image will be uploaded and hosted on ImgBB.</div>
+                    <div class="form-text">The image will be uploaded and hosted on ImgBB.</div>
                 </div>
                 <div id="image-upload-error" class="alert alert-danger" style="display: none;"></div>
                 <div class="text-end">
@@ -141,25 +160,29 @@
         </div>
         <div class="mb-5">
             <h3>Current Gallery Images</h3>
-             <p class="text-muted">Changes here are saved to the cloud and reflected live on the public <a href="gallery.html" target="_blank">Gallery page</a>.</p>
+            <p class="text-muted">Changes here are saved to the cloud and reflected live on the public <a
+                    href="gallery.html" target="_blank">Gallery page</a>.</p>
             <div class="table-responsive glass-effect p-3">
                 <table id="gallery-table" class="table table-borderless align-middle">
                     <thead>
                         <tr>
-                            <th>Preview</th><th>Description</th><th>Actions</th>
+                            <th>Preview</th>
+                            <th>Description</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody><!-- Gallery items will be populated by admin.js --></tbody>
                 </table>
             </div>
         </div>
-        
+
         <hr class="my-5">
 
         <!-- Application Management -->
         <h2 class="h3">Application Management</h2>
         <div class="mb-5">
-            <p class="text-muted">The table below shows all student applications submitted through the "Join Us" form. You can review and delete them as needed.</p>
+            <p class="text-muted">The table below shows all student applications submitted through the "Join Us" form.
+                You can review and delete them as needed.</p>
             <div class="table-responsive glass-effect p-3">
                 <table id="applications-table" class="table table-borderless align-middle">
                     <thead>
@@ -179,7 +202,7 @@
                 </table>
             </div>
         </div>
-        
+
         <hr class="my-5">
 
         <!-- Contact Message Management -->

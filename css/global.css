@@ -1,7 +1,11 @@
+/* Rui: Global variables for colors and gradients. */
 :root {
-    --primary-color: #007aff; /* Apple Blue */
-    --secondary-color: #34c759; /* Apple Green */
-    --accent-color: #ff9500; /* Apple Orange */
+    --primary-color: #007aff;
+    /* Apple Blue */
+    --secondary-color: #34c759;
+    /* Apple Green */
+    --accent-color: #ff9500;
+    /* Apple Orange */
     --dark-color: #1c1c1e;
     --light-color: #f2f2f7;
     --body-bg: #f2f2f7;
@@ -14,6 +18,7 @@
 }
 
 
+/* Rui: Dark mode overrides for all the main colors. */
 [data-theme="dark"] {
     --primary-color: #0a84ff;
     --secondary-color: #30d158;
@@ -29,16 +34,20 @@
 }
 
 
+/* Rui: Smooth transitions and scrolling everywhere. */
 * {
     transition: all 0.3s ease;
     scroll-behavior: smooth;
 }
 
-/* Background Gradient Animation */
+/* Rui: Animated gradient background for the whole site. */
 body::before {
     content: "";
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
     background: linear-gradient(135deg, #ff9f0a, #0a84ff, #30d158);
     background-size: 600% 600%;
@@ -47,11 +56,20 @@ body::before {
 }
 
 @keyframes gradientAnimation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
+/* Rui: Main body layout and font. */
 body {
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     display: flex;
@@ -61,15 +79,23 @@ body {
     background-color: var(--body-bg);
 }
 
+/* Rui: Main content area grows to fill the page. */
 main {
     flex-grow: 1;
 }
 
-h1, h2, h3, h4, h5, h6 {
+/* Rui: All headings are bold and use the main text color. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-weight: 700;
     color: var(--text-color);
 }
 
+/* Rui: Section titles with gradient text. */
 .section-title {
     font-size: 2.8rem;
     font-weight: 700;
@@ -79,6 +105,7 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-text-fill-color: transparent;
 }
 
+/* Rui: Subtitles for sections, lighter color and centered. */
 .section-subtitle {
     color: #8e8e93;
     margin-bottom: 3rem;
@@ -86,7 +113,12 @@ h1, h2, h3, h4, h5, h6 {
     margin-inline: auto;
 }
 
-/* Glassmorphism */
+/* Rui & Pushkal: Make section subtitles readable in dark mode. */
+[data-theme="dark"] .section-subtitle {
+    color: #bdbdc2;
+}
+
+/* Rui: Glass effect for cards and panels. */
 .glass-effect {
     background: var(--card-bg);
     backdrop-filter: blur(15px);
@@ -110,14 +142,19 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
 }
+
 .card:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 35px var(--shadow-color);
 }
+
 .card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     border-radius: 1rem;
     padding: 2px;
     background: var(--musical-gradient);
@@ -128,29 +165,36 @@ h1, h2, h3, h4, h5, h6 {
     mask-composite: exclude;
     opacity: 0;
     transition: opacity 0.4s ease-in-out;
-    pointer-events: none; 
+    pointer-events: none;
 }
+
 .card:hover::before {
     opacity: 1;
 }
+
 .card .card-img-top {
     height: 220px;
     object-fit: cover;
     transition: transform 0.4s ease;
 }
+
 .card:hover .card-img-top {
     transform: scale(1.05);
 }
+
 .card-body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     padding: 1.25rem;
 }
+
 .card-body .btn {
     margin-top: auto;
 }
-.card-title, .card-text {
+
+.card-title,
+.card-text {
     color: var(--text-color);
 }
 
@@ -158,9 +202,11 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #ffffff;
     color: var(--text-color);
 }
+
 [data-theme="dark"] .content-card {
     background-color: var(--card-bg);
 }
+
 [data-theme="dark"] .content-card p {
     color: var(--text-color);
 }
@@ -172,15 +218,18 @@ h1, h2, h3, h4, h5, h6 {
     border-color: var(--primary-color);
     color: white;
 }
+
 .btn-primary:hover {
     filter: brightness(1.1);
     transform: translateY(-2px);
 }
+
 .btn-outline-primary {
     color: var(--primary-color);
     border-color: var(--primary-color);
     background: transparent;
 }
+
 .btn-outline-primary:hover {
     background-color: var(--primary-color);
     color: white;
@@ -192,13 +241,16 @@ h1, h2, h3, h4, h5, h6 {
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-color);
 }
+
 .navbar-brand {
     color: var(--primary-color) !important;
 }
+
 .navbar .nav-link {
     font-weight: 500;
     color: var(--text-color) !important;
 }
+
 .navbar .nav-link:hover,
 .navbar .nav-link.active {
     color: var(--primary-color) !important;
@@ -216,11 +268,13 @@ h1, h2, h3, h4, h5, h6 {
     transition: background 0.3s, color 0.3s, box-shadow 0.3s;
     text-decoration: none;
 }
+
 .nav-sign-in-link:hover {
     background: var(--primary-color);
     color: #fff !important;
     box-shadow: 0 4px 16px var(--shadow-color);
 }
+
 #theme-toggle {
     background: transparent;
     border: none;
@@ -241,26 +295,37 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     z-index: 1040;
 }
+
 .announcement-banner a {
     color: white;
     font-weight: bold;
     text-decoration: underline;
 }
+
 .announcement-banner .announcement-content {
     flex-grow: 1;
     margin: 0 2rem;
 }
+
 .announcement-banner .announcement-item {
     display: none;
     animation: fadeIn 0.8s;
 }
+
 .announcement-banner .announcement-item.active {
     display: block;
 }
+
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
+
 .announcement-banner .close-announcement {
     position: absolute;
     right: 1.5rem;
@@ -274,20 +339,34 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 0.8;
     transition: opacity 0.2s;
 }
+
 .announcement-banner .close-announcement:hover {
     opacity: 1;
 }
 
 /* Forms */
-.form-control, .form-select {
+.form-control,
+.form-select {
     background-color: var(--light-color);
     color: var(--text-color);
     border: 1px solid var(--border-color);
 }
-.form-control:focus, .form-select:focus {
+
+/* Rui & Pushkal: Make form helper text readable in dark mode. */
+.form-text {
+    color: #6c757d;
+}
+
+[data-theme="dark"] .form-text {
+    color: #bdbdc2;
+}
+
+.form-control:focus,
+.form-select:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 0.25rem rgba(0, 122, 255, 0.25);
 }
+
 .form-label {
     color: var(--text-color);
 }
@@ -307,21 +386,47 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 0 0.25rem rgba(10, 132, 255, 0.25);
 }
 
+/* Rui & Pushkal: Make sure input and textarea placeholders are readable in both light and dark mode for contact form */
+input::placeholder,
+textarea::placeholder {
+    color: #888;
+    opacity: 1;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: #bbb;
+    opacity: 1;
+}
+
 /* Footer */
 footer {
     background-color: var(--dark-color);
     color: var(--light-color);
 }
+
+/* Rui & Pushkal: Make .lead text in footer readable in dark mode. */
+.lead {
+    color: var(--dark-color);
+}
+
+[data-theme="dark"] .lead {
+    color: var(--light-color);
+}
+
 footer a {
     color: var(--light-color) !important;
 }
+
 footer a:hover i {
     color: var(--primary-color);
     transform: translateY(-2px);
 }
+
 .text-muted {
     color: #6c757d;
 }
+
 [data-theme="dark"] .text-muted {
     color: rgba(235, 235, 245, 0.7) !important;
 }
@@ -333,6 +438,7 @@ footer a:hover i {
     height: 100px;
     margin-top: -5rem;
 }
+
 .wave-wrapper svg {
     display: block;
     width: 100%;
@@ -344,33 +450,42 @@ footer a:hover i {
     opacity: 0;
     transition-property: opacity, transform;
 }
+
 [data-aos].aos-animate {
     opacity: 1;
 }
 
 /* Floating Contact Button */
 .floating-contact {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #007BFF;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 50px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  z-index: 1000;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1000;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+/* Rui & Pushkal: Floating contact button dark mode style. */
+[data-theme="dark"] .floating-contact {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+}
+
 .floating-contact a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
 }
+
 .floating-contact:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }

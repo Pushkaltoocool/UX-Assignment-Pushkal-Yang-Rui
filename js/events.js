@@ -1,7 +1,7 @@
 import { db } from './firebase-config.js';
 import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initEventsPage();
 });
 
@@ -11,6 +11,7 @@ function initEventsPage() {
 
     if (!calendarEl || !eventTableBody) return;
 
+    // Pushkal: Loads events from Firebase and shows them in the table.
     const loadAndDisplayEvents = async () => {
         eventTableBody.innerHTML = '<tr><td colspan="5" class="text-center">Fetching events...</td></tr>';
         try {
@@ -27,7 +28,7 @@ function initEventsPage() {
     };
 
     const renderTable = (events) => {
-        eventTableBody.innerHTML = ''; 
+        eventTableBody.innerHTML = '';
         if (events.length === 0) {
             eventTableBody.innerHTML = '<tr><td colspan="5" class="text-center">No upcoming events scheduled.</td></tr>';
             return;
@@ -50,7 +51,7 @@ function initEventsPage() {
                 themeSystem: 'bootstrap5',
                 headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,dayGridWeek' },
                 initialView: 'dayGridMonth',
-                events: events 
+                events: events
             });
             calendar.render();
         }
